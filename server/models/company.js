@@ -1,0 +1,14 @@
+module.exports = function(mongoose) {
+    var CompanySchema = mongoose.Schema({
+        slug: String,
+        name: String,
+        url: String,
+        logo: String,
+        industry: String,
+        dashboardAdmin: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+    }, { collection: 'Company' });
+
+    var CompanyModel = mongoose.model('Company', CompanySchema);
+
+    return CompanyModel;
+};
