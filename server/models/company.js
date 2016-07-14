@@ -5,7 +5,8 @@ module.exports = function(mongoose) {
         url: String,
         logo: String,
         industry: String,
-        dashboardAdmin: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+        adminUser: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        subscription: { type: mongoose.Schema.Types.ObjectId, ref: 'Subscription' }
     }, { collection: 'Company' });
 
     var CompanyModel = mongoose.model('Company', CompanySchema);
