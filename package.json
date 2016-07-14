@@ -13,6 +13,8 @@
     "hbs": "~4.0.0",
     "mongoose": "~4.5.4",
     "morgan": "~1.7.0",
-    "serve-favicon": "~2.3.0"
+    "serve-favicon": "~2.3.0",
+    "stripe": "~4.7.0",
+    "twilio": "~2.9.1"
   }
 }
