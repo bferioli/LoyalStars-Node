@@ -6,9 +6,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
-
 var app = express();
 
 mongoose.connect('mongodb://127.0.0.1:27017/LoyalStars');
@@ -25,8 +22,22 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
-app.use('/users', users);
+app.CheckinModel = require('./models/checkin.js')(mongoose);
+app.CompanyModel = require('./models/company.js')(mongoose);
+app.CompanyRewardModel = require('./models/companyReward.js')(mongoose);
+app.LocationModel = require('./models/location.js')(mongoose);
+app.PromotionModel = require('./models/promotion.js')(mongoose);
+app.RewardModel = require('./models/reward.js')(mongoose);
+app.SubscriptionModel = require('./models/subscription.js')(mongoose);
+app.UserModel = require('./models/user.js')(mongoose);
+
+app.TemplateHelpers = require('./helpers/template.js');
+app.TimeHelpers = require('./helpers/time.js');
+
+var CheckinRoute = require('./routes/checkin')(app, mongoose);
+var ConfirmRoute = require('./routes/confirm')(app, mongoose);
+app.get("/checkin/:checkinCode/:phone", CheckinRoute);
+app.get("/checkin/:checkinCode/:phone/confirm", ConfirmRoute);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -59,5 +70,6 @@ app.use(function(err, req, res, next) {
   });
 });
 
+app.listen(3000);
 
 module.exports = app;
