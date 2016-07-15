@@ -31,3 +31,6 @@ npm-debug.log
 
 # WebStorm workspace
 .idea
+
+# Node environment variables
+.env
