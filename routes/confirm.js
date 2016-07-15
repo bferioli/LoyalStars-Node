@@ -1,18 +1,21 @@
 module.exports = function (app) {
     var ConfirmRoute = function (req, res) {
+        if (!req.params.phone) {
+            res.status(404).send('No phone number provided.');
+            return;
+        }
 
-        // decode phone
-
-        var data = {};
+        var data = {},
+            phone = app.PhoneHelpers.decodePhone(req.params.phone);
 
         app.LocationModel.getByCheckinCode(req.params.checkinCode)
             .then(function (location) {
                 data.location = location;
-                return app.CheckinModel.getByCompany(location.company, req.params.phone);
+                return app.CheckinModel.getByCompany(location.company, phone);
             })
             .then(function (checkins) {
                 data.checkins = checkins;
-                return app.UserModel.getByPhone(req.params.phone)
+                return app.UserModel.getByPhone(phone)
             })
             .then(function (user) {
                 if (!user || !user.superUser) {
@@ -50,7 +53,7 @@ module.exports = function (app) {
                 var checkin = new app.CheckinModel({
                     company: data.location.company._id,
                     location: data.location._id,
-                    phone: req.params.phone,
+                    phone: phone,
                     latitude: req.params.latitude,
                     longitude: req.params.longitude,
                     accuracy: req.params.accuracy,
@@ -62,7 +65,7 @@ module.exports = function (app) {
 
                 app.CheckinModel.savePromise(checkin)
                     .then(function () {
-                        return app.CheckinModel.getByCompany(data.location.company, req.params.phone);
+                        return app.CheckinModel.getByCompany(data.location.company, phone);
                     })
                     .then(function (checkins) {
                         data.checkins = checkins;
@@ -77,23 +80,27 @@ module.exports = function (app) {
                                 company: data.location.company._id,
                                 companyReward: data.location.reward._id,
                                 location: data.location._id,
-                                phone: req.params.phone
+                                phone: phone
                             });
 
                             app.RewardModel.savePromise(reward)
-                                .then(function () {
-                                    data.reward = reward;
-                                    res.json(data);
-                                    return;
+                                .then(function (saved) {
+                                    data.reward = saved;
+                                    return app.PhoneHelpers.sendRewardMessage(data, phone);
                                 })
+                                .then(function(){
+                                    res.json(data);
+                                })
+                                .catch(console.log)
+                                .done();
+                        } else {
+                            data.rowWidth = app.TemplateHelpers.getRowWidth(data.checkinsRequired);
+                            data.rowRange = parseInt(1 + Math.floor(data.checkinsRequired / data.rowWidth));
+                            data.theme = app.TemplateHelpers.getTheme('orange');
+                            data.cardMessage = data.checkinsRequired - data.checkinsEarned + ' More check-in(s) to earn a ' + data.location.reward.name;
+
+                            res.json(data);
                         }
-
-                        data.rowWidth = app.TemplateHelpers.getRowWidth(data.checkinsRequired);
-                        data.rowRange = parseInt(1 + Math.floor(data.checkinsRequired / data.rowWidth));
-                        data.theme = app.TemplateHelpers.getTheme('orange');
-                        data.cardMessage = data.checkinsRequired - data.checkinsEarned + ' More check-in(s) to earn a ' + data.location.reward.name;
-
-                        res.json(data);
                     })
                     .catch(console.log)
                     .done();

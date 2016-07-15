@@ -12,6 +12,25 @@ module.exports = function(mongoose) {
 
     var RewardModel = mongoose.model('Reward', RewardSchema);
 
+    RewardModel.getByPhone = function(phone) {
+        var deferred = Q.defer();
+
+        this.findOne({phone: phone, redeemed: null})
+            .populate('company')
+            .populate('companyReward')
+            .populate('location')
+            .exec(function(error, reward){
+                if (error) {
+                    deferred.reject(new Error(error));
+                }
+                else {
+                    deferred.resolve(reward);
+                }
+            });
+
+        return deferred.promise;
+    };
+
     RewardModel.savePromise = function(model) {
         var deferred = Q.defer();
 

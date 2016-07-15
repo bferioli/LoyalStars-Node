@@ -1,5 +1,5 @@
-var time = require('time');
 var helpers = {};
+var time = require('time');
 
 helpers.getLocationOpenNow = function(location) {
     if (!location.scheduleEnabled)

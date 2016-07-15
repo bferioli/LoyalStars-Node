@@ -5,9 +5,8 @@ module.exports = function (app) {
             return;
         }
 
-        // decode phone
-
-        var data = {};
+        var data = {},
+            phone = app.PhoneHelpers.decodePhone(req.params.phone);
 
         app.LocationModel.getByCheckinCode(req.params.checkinCode)
             .then(function(location){
@@ -16,7 +15,7 @@ module.exports = function (app) {
                     return;
                 }
                 data.location = location;
-                return app.CheckinModel.getByCompany(location.company, req.params.phone);
+                return app.CheckinModel.getByCompany(location.company, phone);
             })
             .then(function(checkins){
                 data.checkins = checkins;

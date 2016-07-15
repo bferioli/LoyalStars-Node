@@ -31,13 +31,16 @@ app.RewardModel = require('./models/reward.js')(mongoose);
 app.SubscriptionModel = require('./models/subscription.js')(mongoose);
 app.UserModel = require('./models/user.js')(mongoose);
 
+app.PhoneHelpers = require('./helpers/phone.js');
 app.TemplateHelpers = require('./helpers/template.js');
 app.TimeHelpers = require('./helpers/time.js');
 
-var CheckinRoute = require('./routes/checkin')(app, mongoose);
-var ConfirmRoute = require('./routes/confirm')(app, mongoose);
+var CheckinRoute = require('./routes/checkin')(app);
+var ConfirmRoute = require('./routes/confirm')(app);
+var TwilioRoute = require('./routes/twilio')(app);
 app.get("/checkin/:checkinCode/:phone", CheckinRoute);
 app.get("/checkin/:checkinCode/:phone/confirm", ConfirmRoute);
+app.post("/twilio/checkin", TwilioRoute);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
