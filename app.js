@@ -39,9 +39,11 @@ app.TimeHelpers = require('./helpers/time.js');
 
 var CheckinRoute = require('./routes/checkin')(app);
 var ConfirmRoute = require('./routes/confirm')(app);
+var RewardRoute = require('./routes/reward')(app);
 var TwilioRoute = require('./routes/twilio')(app);
 app.get("/checkin/:checkinCode/:phone", CheckinRoute);
 app.get("/checkin/:checkinCode/:phone/confirm", ConfirmRoute);
+app.get("/reward/:rewardId/:phone", RewardRoute);
 app.post("/twilio/checkin", TwilioRoute);
 
 // catch 404 and forward to error handler

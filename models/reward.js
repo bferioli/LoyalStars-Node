@@ -31,6 +31,25 @@ module.exports = function(mongoose) {
         return deferred.promise;
     };
 
+    RewardModel.getById = function(id) {
+        var deferred = Q.defer();
+
+        this.findById(id)
+            .populate('company')
+            .populate('companyReward')
+            .populate('location')
+            .exec(function(error, reward){
+                if (error) {
+                    deferred.reject(new Error(error));
+                }
+                else {
+                    deferred.resolve(reward);
+                }
+            });
+
+        return deferred.promise;
+    };
+
     RewardModel.savePromise = function(model) {
         var deferred = Q.defer();
 

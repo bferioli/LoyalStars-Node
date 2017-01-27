@@ -1,10 +1,5 @@
 module.exports = function (app) {
     var ConfirmRoute = function (req, res) {
-        if (!req.params.phone) {
-            res.status(404).send('No phone number provided.');
-            return;
-        }
-
         var data = {},
             phone = app.PhoneHelpers.decodePhone(req.params.phone);
 
@@ -71,8 +66,8 @@ module.exports = function (app) {
                         data.checkins = checkins;
                         data.totalCheckins = checkins.length;
                         data.checkinsRequired = data.location.reward.checkinsRequired;
-                        data.checkinsEarned = data.totalCheckins % data.checkinsRequired;
-                        data.rewardEarned = ( data.checkinsEarned == 0 && data.totalCheckins > 0 );
+                        data.checkinsTowardsReward = data.totalCheckins % data.checkinsRequired;
+                        data.rewardEarned = ( data.checkinsTowardsReward == 0 && data.totalCheckins > 0 );
                         data.theme = app.TemplateHelpers.getTheme('orange');
 
                         if (data.rewardEarned) {

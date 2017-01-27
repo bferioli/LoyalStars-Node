@@ -1,10 +1,5 @@
 module.exports = function (app) {
     var CheckinRoute = function(req, res){
-        if (!req.params.phone) {
-            res.status(404).send('No phone number provided.');
-            return;
-        }
-
         var data = {},
             phone = app.PhoneHelpers.decodePhone(req.params.phone);
 
