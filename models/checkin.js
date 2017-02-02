@@ -16,6 +16,38 @@ module.exports = function(mongoose) {
 
     var CheckinModel = mongoose.model('Checkin', CheckinSchema);
 
+    CheckinModel.allByCompany = function(companyId) {
+        var deferred = Q.defer();
+
+        this.find({'company': companyId})
+            .exec(function(error, checkins){
+                if (error) {
+                    deferred.reject(new Error(error));
+                }
+                else {
+                    deferred.resolve(checkins);
+                }
+            });
+
+        return deferred.promise;
+    };
+
+    CheckinModel.allByLocation = function(locationId) {
+        var deferred = Q.defer();
+
+        this.find({'location': locationId})
+            .exec(function(error, checkins){
+                if (error) {
+                    deferred.reject(new Error(error));
+                }
+                else {
+                    deferred.resolve(checkins);
+                }
+            });
+
+        return deferred.promise;
+    };
+
     CheckinModel.getByCompany = function(company, phone) {
         var deferred = Q.defer();
 

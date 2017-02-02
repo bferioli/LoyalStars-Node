@@ -37,13 +37,45 @@ app.PhoneHelpers = require('./helpers/phone.js');
 app.TemplateHelpers = require('./helpers/template.js');
 app.TimeHelpers = require('./helpers/time.js');
 
-var CheckinRoute = require('./routes/checkin')(app);
-var ConfirmRoute = require('./routes/confirm')(app);
-var RewardRoute = require('./routes/reward')(app);
+var CheckinRoute = require('./routes/checkins/checkin')(app);
+var ConfirmRoute = require('./routes/checkins/confirm')(app);
+
+var CompanyRoute = require('./routes/companies/company')(app);
+var CompaniesRoute = require('./routes/companies/companies')(app);
+var CreateCompanyRoute = require('./routes/companies/createCompany')(app);
+var UpdateCompanyRoute = require('./routes/companies/updateCompany')(app);
+
+var LocationRoute = require('./routes/locations/location')(app);
+var LocationsRoute = require('./routes/locations/locations')(app);
+var CreateLocationRoute = require('./routes/locations/createLocation')(app);
+var UpdateLocationRoute = require('./routes/locations/updateLocation')(app);
+
+var RewardRoute = require('./routes/rewards/reward')(app);
+var RewardsRoute = require('./routes/rewards/rewards')(app);
+var RewardsByCompanyRoute = require('./routes/rewards/rewardsByCompany')(app);
+var RewardsByLocationRoute = require('./routes/rewards/rewardsByLocation')(app);
+
 var TwilioRoute = require('./routes/twilio')(app);
+
 app.get("/checkin/:checkinCode/:phone", CheckinRoute);
 app.get("/checkin/:checkinCode/:phone/confirm", ConfirmRoute);
-app.get("/reward/:rewardId/:phone", RewardRoute);
+
+app.get("/companies/:companyId", CompanyRoute);
+app.get("/companies", CompaniesRoute);
+app.post("/companies", CreateCompanyRoute);
+app.put("/companies/:companyId", UpdateCompanyRoute);
+
+app.get("/companies/:companyId/locations/:locationId", LocationRoute);
+app.get("/companies/:companyId/locations", LocationsRoute);
+app.post("/companies/:companyId/locations", CreateLocationRoute);
+app.put("/companies/:companyId/locations/:locationId", UpdateLocationRoute);
+
+app.get("/rewards/:rewardId/:phone", RewardRoute);
+app.get("/rewards", RewardsRoute);
+app.get("/companies/:companyId/rewards", RewardsByCompanyRoute);
+app.get("/locations/:locationId/rewards", RewardsByLocationRoute);
+
+
 app.post("/twilio/checkin", TwilioRoute);
 
 // catch 404 and forward to error handler

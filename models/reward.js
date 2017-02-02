@@ -12,6 +12,57 @@ module.exports = function(mongoose) {
 
     var RewardModel = mongoose.model('Reward', RewardSchema);
 
+    RewardModel.getAll = function() {
+        var deferred = Q.defer();
+
+        this.find()
+            .populate('companyReward')
+            .exec(function(error, rewards){
+                if (error) {
+                    deferred.reject(new Error(error));
+                }
+                else {
+                    deferred.resolve(rewards);
+                }
+            });
+
+        return deferred.promise;
+    };
+
+    RewardModel.getByCompany = function(companyId) {
+        var deferred = Q.defer();
+
+        this.find({company: companyId})
+            .populate('companyReward')
+            .exec(function(error, rewards){
+                if (error) {
+                    deferred.reject(new Error(error));
+                }
+                else {
+                    deferred.resolve(rewards);
+                }
+            });
+
+        return deferred.promise;
+    };
+
+    RewardModel.getByLocation = function(locationId) {
+        var deferred = Q.defer();
+
+        this.find({location: locationId})
+            .populate('companyReward')
+            .exec(function(error, rewards){
+                if (error) {
+                    deferred.reject(new Error(error));
+                }
+                else {
+                    deferred.resolve(rewards);
+                }
+            });
+
+        return deferred.promise;
+    };
+
     RewardModel.getByPhone = function(phone) {
         var deferred = Q.defer();
 

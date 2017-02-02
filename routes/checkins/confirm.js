@@ -1,7 +1,7 @@
 module.exports = function (app) {
     var ConfirmRoute = function (req, res) {
         var data = {},
-            phone = app.PhoneHelpers.decodePhone(req.params.phone);
+            phone = req.params.phone ? app.PhoneHelpers.decodePhone(req.params.phone) : '';
 
         app.LocationModel.getByCheckinCode(req.params.checkinCode)
             .then(function (location) {
@@ -97,10 +97,16 @@ module.exports = function (app) {
                             res.json(data);
                         }
                     })
-                    .catch(console.log)
+                    .catch(function(err){
+                        console.log(err);
+                        res.status(404).send('Save failed.');
+                    })
                     .done();
             })
-            .catch(console.log)
+            .catch(function(err){
+                console.log(err);
+                res.status(404).send('Location not found.');
+            })
             .done();
     };
 
