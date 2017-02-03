@@ -12,13 +12,14 @@ helpers.decodePhone = function(encoded) {
 };
 
 helpers.sendRewardMessage = function(data, phone) {
-    var client = new twilio.RestClient(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
-    var deferred = Q.defer();
+    var client = new twilio.RestClient(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN),
+        deferred = Q.defer(),
+        encodedPhone = helpers.encodePhone(phone);
 
     client.sms.messages.create({
         to: '+1' + phone,
         from: process.env.TWILIO_NUMBER,
-        body: "You've earned a reward at " + data.location.name + ", to claim visit " + process.env.URL_PATH + "/reward/" + data.reward._id + "/" + phone
+        body: "You've earned a reward at " + data.location.name + ", to claim visit " + process.env.URL_PATH + "/api/rewards/" + data.reward._id + "/" + encodedPhone
     }, function(error, message){
         if (error) {
             deferred.reject(new Error(error));
