@@ -10,7 +10,7 @@ module.exports = function (app) {
                     return;
                 }
                 data.location = location;
-                return app.CheckinModel.getByCompany(location.company, phone);
+                return app.CheckinModel.getByPhoneAtCompany(location.company, phone);
             })
             .then(function(checkins){
                 data.checkins = checkins;

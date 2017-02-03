@@ -8,7 +8,7 @@ module.exports = function (app) {
         app.LocationModel.getByCheckinCode(req.params.checkinCode)
             .then(function (location) {
                 data.location = location;
-                return app.CheckinModel.getByCompany(location.company, phone);
+                return app.CheckinModel.getByPhoneAtCompany(location.company, phone);
             })
             .then(function (checkins) {
                 data.checkins = checkins;
@@ -62,7 +62,7 @@ module.exports = function (app) {
 
                 app.CheckinModel.savePromise(checkin)
                     .then(function () {
-                        return app.CheckinModel.getByCompany(data.location.company, phone);
+                        return app.CheckinModel.getByPhoneAtCompany(data.location.company, phone);
                     })
                     .then(function (checkins) {
                         data.checkins = checkins;

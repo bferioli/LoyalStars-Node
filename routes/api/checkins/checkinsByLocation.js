@@ -2,7 +2,7 @@ module.exports = function (app) {
 
     var CheckinsByLocationRoute = function(req, res){
 
-        app.CheckinModel.allByLocation(req.params.locationId)
+        app.CheckinModel.getByLocation(req.params.locationId)
             .then(function(checkins){
                 res.json(checkins);
             })

@@ -32,21 +32,21 @@ module.exports = function(mongoose) {
         return deferred.promise;
     };
 
-    CheckinModel.allByCompany = function(companyId) {
+    CheckinModel.getByCompany = function(companyId) {
         var deferred = Q.defer();
         this.find({'company': companyId})
             .exec(this.deferredCallback(deferred));
         return deferred.promise;
     };
 
-    CheckinModel.allByLocation = function(locationId) {
+    CheckinModel.getByLocation = function(locationId) {
         var deferred = Q.defer();
         this.find({'location': locationId})
             .exec(this.deferredCallback(deferred));
         return deferred.promise;
     };
 
-    CheckinModel.getByCompany = function(company, phone) {
+    CheckinModel.getByPhoneAtCompany = function(company, phone) {
         var deferred = Q.defer();
         this.find({'phone': phone, 'company': company._id})
             .populate('location')
@@ -57,7 +57,7 @@ module.exports = function(mongoose) {
         return deferred.promise;
     };
 
-    CheckinModel.getByLocation = function(location, phone) {
+    CheckinModel.getByPhoneAtLocation = function(location, phone) {
         var deferred = Q.defer();
         this.find({'phone': phone, 'location': location._id})
             .populate('location')

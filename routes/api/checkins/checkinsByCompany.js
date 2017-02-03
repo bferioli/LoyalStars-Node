@@ -2,7 +2,7 @@ module.exports = function (app) {
 
     var CheckinsByCompanyRoute = function(req, res){
 
-        app.CheckinModel.allByCompany(req.params.companyId)
+        app.CheckinModel.getByCompany(req.params.companyId)
             .then(function(checkins){
                 res.json(checkins);
             })
