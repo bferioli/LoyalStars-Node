@@ -1,14 +1,11 @@
 module.exports = function (app) {
     var CompanyRewardRoute = function(req, res){;
 
-        app.CompanyRewardModel.getById(req.params.companyRewardRoute)
+        app.CompanyRewardModel.getById(req.params.companyRewardId)
             .then(function(companyReward){
                 res.json(companyReward);
             })
-            .catch(function(err){
-                console.log(err);
-                res.status(404).send('Reward not found.');
-            })
+            .catch(app.ErrorHelpers.notFound(res))
             .done();
     };
 

@@ -1,5 +1,16 @@
 var helpers = {};
+var moment = require('moment');
 var time = require('time');
+
+helpers.checkinsTodayFilter = function(checkin) {
+    var startOfDay = moment().startOf('day');
+    return moment(checkin.date).isAfter(startOfDay);
+};
+
+helpers.checkinsLastTwoHoursFilter = function(checkin) {
+    var twoHoursAgo = moment().subtract(2,'hours');
+    return moment(checkin.date).isAfter(twoHoursAgo);
+};
 
 helpers.getLocationOpenNow = function(location) {
     if (!location.scheduleEnabled)

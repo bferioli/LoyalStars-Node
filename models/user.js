@@ -15,21 +15,21 @@ module.exports = function(mongoose) {
 
     var UserModel = mongoose.model('User', UserSchema);
 
+    UserModel.deferredCallback = function(deferred) {
+        return function(error, res) {
+            if (error)
+                deferred.reject(new Error(error));
+            else
+                deferred.resolve(res);
+        };
+    };
+
     UserModel.getByPhone = function(phone) {
         var deferred = Q.defer();
-
         this.findOne({phone: phone})
             .populate('companies')
             .populate('subscriptions')
-            .exec(function(error, user){
-                if (error) {
-                    deferred.reject(new Error(error));
-                }
-                else {
-                    deferred.resolve(user);
-                }
-            });
-
+            .exec(this.deferredCallback(deferred));
         return deferred.promise;
     };
 

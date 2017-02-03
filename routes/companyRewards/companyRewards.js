@@ -5,10 +5,7 @@ module.exports = function (app) {
             .then(function(companyRewards){
                 res.json(companyRewards);
             })
-            .catch(function(err){
-                console.log(err);
-                res.status(404).send('No rewards found.');
-            })
+            .catch(app.ErrorHelpers.notFound(res))
             .done();
     };
 

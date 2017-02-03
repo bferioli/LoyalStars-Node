@@ -1,7 +1,7 @@
 module.exports = function (app) {
-    var CompaniesRoute = function(req, res){
+    var CheckinsRoute = function(req, res){
 
-        app.CompanyModel.getAll()
+        app.CheckinModel.getAll()
             .then(function(companies){
                 res.json(companies);
             })
@@ -9,5 +9,5 @@ module.exports = function (app) {
             .done();
     };
 
-    return CompaniesRoute;
+    return CheckinsRoute;
 };

@@ -33,6 +33,7 @@ app.RewardModel = require('./models/reward.js')(mongoose);
 app.SubscriptionModel = require('./models/subscription.js')(mongoose);
 app.UserModel = require('./models/user.js')(mongoose);
 
+app.ErrorHelpers = require('./helpers/error.js');
 app.PhoneHelpers = require('./helpers/phone.js');
 app.TemplateHelpers = require('./helpers/template.js');
 app.TimeHelpers = require('./helpers/time.js');
@@ -40,15 +41,28 @@ app.TimeHelpers = require('./helpers/time.js');
 var CheckinRoute = require('./routes/checkins/checkin')(app);
 var ConfirmRoute = require('./routes/checkins/confirm')(app);
 
+var CheckinsRoute = require('./routes/checkins/checkins')(app);
+var CheckinsByCompanyRoute = require('./routes/checkins/checkinsByCompany')(app);
+var CheckinsByLocationRoute = require('./routes/checkins/checkinsByLocation')(app);
+var DeleteCheckinsByCompanyRoute = require('./routes/checkins/deleteCheckinsByCompany')(app);
+
 var CompanyRoute = require('./routes/companies/company')(app);
 var CompaniesRoute = require('./routes/companies/companies')(app);
 var CreateCompanyRoute = require('./routes/companies/createCompany')(app);
+var DeleteCompanyRoute = require('./routes/companies/deleteCompany')(app);
 var UpdateCompanyRoute = require('./routes/companies/updateCompany')(app);
 
 var LocationRoute = require('./routes/locations/location')(app);
 var LocationsRoute = require('./routes/locations/locations')(app);
 var CreateLocationRoute = require('./routes/locations/createLocation')(app);
+var DeleteLocationRoute = require('./routes/locations/deleteLocation')(app);
 var UpdateLocationRoute = require('./routes/locations/updateLocation')(app);
+
+var CompanyRewardRoute = require('./routes/companyRewards/companyReward')(app);
+var CompanyRewardsRoute = require('./routes/companyRewards/companyRewards')(app);
+var CreateCompanyRewardRoute = require('./routes/companyRewards/createCompanyReward')(app);
+var DeleteCompanyRewardRoute = require('./routes/companyRewards/deleteCompanyReward')(app);
+var UpdateCompanyRewardRoute = require('./routes/companyRewards/updateCompanyReward')(app);
 
 var RewardRoute = require('./routes/rewards/reward')(app);
 var RewardsRoute = require('./routes/rewards/rewards')(app);
@@ -60,14 +74,27 @@ var TwilioRoute = require('./routes/twilio')(app);
 app.get("/checkin/:checkinCode/:phone", CheckinRoute);
 app.get("/checkin/:checkinCode/:phone/confirm", ConfirmRoute);
 
+app.get("/checkins", CheckinsRoute);
+app.get("/company/:companyId/checkins", CheckinsByCompanyRoute);
+app.get("/company/:companyId/locations/:locationId/checkins", CheckinsByLocationRoute);
+app.delete("/company/:companyId/checkins", DeleteCheckinsByCompanyRoute);
+
 app.get("/companies/:companyId", CompanyRoute);
 app.get("/companies", CompaniesRoute);
 app.post("/companies", CreateCompanyRoute);
+app.delete("/companies/:companyId", DeleteCompanyRoute);
 app.put("/companies/:companyId", UpdateCompanyRoute);
+
+app.get("/companies/:companyId/companyRewards/:companyRewardId", CompanyRewardRoute);
+app.get("/companies/:companyId/companyRewards", CompanyRewardsRoute);
+app.post("/companies/:companyId/companyRewards", CreateCompanyRewardRoute);
+app.delete("/companies/:companyId/companyRewards/:companyRewardId", DeleteCompanyRewardRoute);
+app.put("/companies/:companyId/companyRewards/:companyRewardId", UpdateCompanyRewardRoute);
 
 app.get("/companies/:companyId/locations/:locationId", LocationRoute);
 app.get("/companies/:companyId/locations", LocationsRoute);
 app.post("/companies/:companyId/locations", CreateLocationRoute);
+app.delete("/companies/:companyId/locations/:locationId", DeleteLocationRoute);
 app.put("/companies/:companyId/locations/:locationId", UpdateLocationRoute);
 
 app.get("/rewards/:rewardId/:phone", RewardRoute);

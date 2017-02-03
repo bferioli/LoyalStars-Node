@@ -16,90 +16,69 @@ module.exports = function(mongoose) {
 
     var CheckinModel = mongoose.model('Checkin', CheckinSchema);
 
+    CheckinModel.deferredCallback = function(deferred) {
+        return function(error, res) {
+            if (error)
+                deferred.reject(new Error(error));
+            else
+                deferred.resolve(res);
+        };
+    };
+
+    CheckinModel.getAll = function() {
+        var deferred = Q.defer();
+        this.find()
+            .exec(this.deferredCallback(deferred));
+        return deferred.promise;
+    };
+
     CheckinModel.allByCompany = function(companyId) {
         var deferred = Q.defer();
-
         this.find({'company': companyId})
-            .exec(function(error, checkins){
-                if (error) {
-                    deferred.reject(new Error(error));
-                }
-                else {
-                    deferred.resolve(checkins);
-                }
-            });
-
+            .exec(this.deferredCallback(deferred));
         return deferred.promise;
     };
 
     CheckinModel.allByLocation = function(locationId) {
         var deferred = Q.defer();
-
         this.find({'location': locationId})
-            .exec(function(error, checkins){
-                if (error) {
-                    deferred.reject(new Error(error));
-                }
-                else {
-                    deferred.resolve(checkins);
-                }
-            });
-
+            .exec(this.deferredCallback(deferred));
         return deferred.promise;
     };
 
     CheckinModel.getByCompany = function(company, phone) {
         var deferred = Q.defer();
-
         this.find({'phone': phone, 'company': company._id})
             .populate('location')
             .populate('user')
             .populate('promotion')
             .populate('reward')
-            .exec(function(error, checkins){
-                if (error) {
-                    deferred.reject(new Error(error));
-                }
-                else {
-                    deferred.resolve(checkins);
-                }
-            });
-
+            .exec(this.deferredCallback(deferred));
         return deferred.promise;
     };
 
     CheckinModel.getByLocation = function(location, phone) {
         var deferred = Q.defer();
-
         this.find({'phone': phone, 'location': location._id})
             .populate('location')
             .populate('user')
             .populate('promotion')
             .populate('reward')
-            .exec(function(error, checkins){
-                if (error) {
-                    deferred.reject(new Error(error));
-                }
-                else {
-                    deferred.resolve(checkins);
-                }
-            });
+            .exec(this.deferredCallback(deferred));
+        return deferred.promise;
+    };
 
+    CheckinModel.deleteByCompany = function(companyId) {
+        var deferred = Q.defer();
+        this.find({'company': companyId})
+            .remove()
+            .exec(this.deferredCallback(deferred));
         return deferred.promise;
     };
 
     CheckinModel.savePromise = function(model) {
         var deferred = Q.defer();
-
-        model.save(function(error, checkin){
-            if (error) {
-                deferred.reject(new Error(error));
-            }
-            else {
-                deferred.resolve(checkin);
-            }
-        });
-
+        model.save(this.deferredCallback(deferred));
         return deferred.promise;
     };
 

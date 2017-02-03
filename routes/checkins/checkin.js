@@ -6,7 +6,7 @@ module.exports = function (app) {
         app.LocationModel.getByCheckinCode(req.params.checkinCode)
             .then(function(location){
                 if (!location) {
-                    res.status(404).send('Location not found.');
+                    app.ErrorHelpers.notFound(res)('Location not found.');
                     return;
                 }
                 data.location = location;
@@ -24,10 +24,7 @@ module.exports = function (app) {
 
                 res.json(data);
             })
-            .catch(function(err){
-                console.log(err);
-                res.status(404).send('Location not found.');
-            })
+            .catch(app.ErrorHelpers.notFound(res))
             .done();
     };
     

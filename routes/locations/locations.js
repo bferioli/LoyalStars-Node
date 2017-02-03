@@ -5,10 +5,7 @@ module.exports = function (app) {
             .then(function(locations){
                 res.json(locations);
             })
-            .catch(function(err){
-                console.log(err);
-                res.status(404).send('No locations found.');
-            })
+            .catch(app.ErrorHelpers.notFound(res))
             .done();
     };
 

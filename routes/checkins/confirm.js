@@ -1,3 +1,5 @@
+var moment = require('moment');
+
 module.exports = function (app) {
     var ConfirmRoute = function (req, res) {
         var data = {},
@@ -14,31 +16,31 @@ module.exports = function (app) {
             })
             .then(function (user) {
                 if (!user || !user.superUser) {
-                    var checkinsToday = data.checkins, // Todo: get only checkins from today
-                        checkinsLastTwoHours = data.checkins, // Todo: get only checkins from last two hours
+                    var checkinsToday = data.checkins.filter(app.TimeHelpers.checkinsTodayFilter),
+                        checkinsLastTwoHours = data.checkins.filter(app.TimeHelpers.checkinsLastTwoHoursFilter),
                         locationOpenNow = app.TimeHelpers.getLocationOpenNow(data.location);
 
                     // Time fencing
                     if (!locationOpenNow) {
-                        res.status(404).send('This location is not currently open.');
+                        app.ErrorHelpers.notFound(res)('This location is not currently open.');
                         return;
                     } else if (checkinsToday.length >= 2) {
-                        res.status(404).send('You cannot check in here more than twice daily.');
+                        app.ErrorHelpers.notFound(res)('You cannot check in here more than twice daily.');
                         return;
                     } else if (checkinsLastTwoHours.length >= 1) {
-                        res.status(404).send('You cannot check in here more than once within two hours.');
+                        app.ErrorHelpers.notFound(res)('You cannot check in here more than once within two hours.');
                         return;
                     }
 
                     // Geo fencing
                     if (data.location.latitude && data.location.longitude) {
                         if (!req.params.latitude || !req.params.longitude || !req.params.accuracy) {
-                            res.status(404).send('Geolocation must be enabled to verify your checkin.');
+                            app.ErrorHelpers.notFound(res)('Geolocation must be enabled to verify your checkin.');
                             return;
                         } else {
                             withinRadius = app.GeolocationHelpers.getLocationWithinRadius(data.location.latitude, data.location.longitude, req.params.latitude, req.params.longitude, req.params.accuracy);
                             if (!withinRadius) {
-                                res.status(404).send('You must be present at this location to check in.');
+                                app.ErrorHelpers.notFound(res)('You must be present at this location to check in.');
                                 return;
                             }
                         }
@@ -97,16 +99,10 @@ module.exports = function (app) {
                             res.json(data);
                         }
                     })
-                    .catch(function(err){
-                        console.log(err);
-                        res.status(404).send('Save failed.');
-                    })
+                    .catch(app.ErrorHelpers.notFound(res))
                     .done();
             })
-            .catch(function(err){
-                console.log(err);
-                res.status(404).send('Location not found.');
-            })
+            .catch(app.ErrorHelpers.notFound(res))
             .done();
     };
 

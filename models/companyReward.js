@@ -1,3 +1,5 @@
+var Q = require('q');
+
 module.exports = function(mongoose) {
     var CompanyRewardSchema = mongoose.Schema({
         company: { type: mongoose.Schema.Types.ObjectId, ref: 'Company' },
@@ -8,65 +10,54 @@ module.exports = function(mongoose) {
 
     var CompanyRewardModel = mongoose.model('CompanyReward', CompanyRewardSchema);
 
+    CompanyRewardModel.deferredCallback = function(deferred) {
+        return function(error, res) {
+            if (error)
+                deferred.reject(new Error(error));
+            else
+                deferred.resolve(res);
+        };
+    };
+
     CompanyRewardModel.getByCompany = function(companyId) {
         var deferred = Q.defer();
-
         this.find({company: companyId})
-            .exec(function(error, companyRewards){
-                if (error) {
-                    deferred.reject(new Error(error));
-                }
-                else {
-                    deferred.resolve(companyRewards);
-                }
-            });
-
+            .exec(this.deferredCallback(deferred));
         return deferred.promise;
     };
 
     CompanyRewardModel.getById = function(id) {
         var deferred = Q.defer();
-
         this.findById(id)
-            .exec(function(error, companyReward){
-                if (error) {
-                    deferred.reject(new Error(error));
-                }
-                else {
-                    deferred.resolve(companyReward);
-                }
-            });
-
-        return deferred.promise;
-    };
-
-    CompanyRewardModel.savePromise = function(model) {
-        var deferred = Q.defer();
-
-        model.save(function(error, companyReward){
-            if (error) {
-                deferred.reject(new Error(error));
-            }
-            else {
-                deferred.resolve(companyReward);
-            }
-        });
-
+            .exec(this.deferredCallback(deferred));
         return deferred.promise;
     };
 
     CompanyRewardModel.updateById = function(id, model) {
         var deferred = Q.defer();
+        this.findOneAndUpdate({_id: id}, model, {new: true}, this.deferredCallback(deferred));
+        return deferred.promise;
+    };
 
-        this.findOneAndUpdate({_id: id}, model, {new: true}, function(error, companyReward){
-            if (error) {
-                deferred.reject(new Error(error));
-            }
-            else {
-                deferred.resolve(companyReward);
-            }
-        });
+    CompanyRewardModel.deleteByCompany = function(companyId) {
+        var deferred = Q.defer();
+        this.find({'company': companyId})
+            .remove()
+            .exec(this.deferredCallback(deferred));
+        return deferred.promise;
+    };
 
+    CompanyRewardModel.deleteById = function(id) {
+        var deferred = Q.defer();
+        this.find({ _id: id })
+            .remove()
+            .exec(this.deferredCallback(deferred));
+        return deferred.promise;
+    };
+
+    CompanyRewardModel.savePromise = function(model) {
+        var deferred = Q.defer();
+        model.save(this.deferredCallback(deferred));
         return deferred.promise;
     };
 

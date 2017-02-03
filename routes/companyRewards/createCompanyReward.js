@@ -10,16 +10,10 @@ module.exports = function (app) {
                     .then(function(companyReward){
                         res.json(companyReward);
                     })
-                    .catch(function(err){
-                        console.log(err);
-                        res.status(404).send('Error creating reward.');
-                    })
+                    .catch(app.ErrorHelpers.notFound(res))
                     .done();
             })
-            .catch(function(err){
-                console.log(err);
-                res.status(404).send('Company not found.');
-            })
+            .catch(app.ErrorHelpers.notFound(res))
             .done();
     };
 

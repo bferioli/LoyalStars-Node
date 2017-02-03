@@ -13,65 +13,46 @@ module.exports = function(mongoose) {
 
     var CompanyModel = mongoose.model('Company', CompanySchema);
 
+    CompanyModel.deferredCallback = function(deferred) {
+        return function(error, res) {
+            if (error)
+                deferred.reject(new Error(error));
+            else
+                deferred.resolve(res);
+        };
+    };
+
     CompanyModel.getAll = function() {
         var deferred = Q.defer();
-
         this.find()
-            .exec(function(error, companies){
-                if (error) {
-                    deferred.reject(new Error(error));
-                }
-                else {
-                    deferred.resolve(companies);
-                }
-            });
-
+            .exec(this.deferredCallback(deferred));
         return deferred.promise;
     };
 
     CompanyModel.getById = function(id) {
         var deferred = Q.defer();
-
         this.findById(id)
-            .exec(function(error, company){
-                if (error) {
-                    deferred.reject(new Error(error));
-                }
-                else {
-                    deferred.resolve(company);
-                }
-            });
-
-        return deferred.promise;
-    };
-
-    CompanyModel.savePromise = function(model) {
-        var deferred = Q.defer();
-
-        model.save(function(error, company){
-            if (error) {
-                deferred.reject(new Error(error));
-            }
-            else {
-                deferred.resolve(company);
-            }
-        });
-
+            .exec(this.deferredCallback(deferred));
         return deferred.promise;
     };
 
     CompanyModel.updateById = function(id, model) {
         var deferred = Q.defer();
+        this.findOneAndUpdate({_id: id}, model, {new: true}, this.deferredCallback(deferred));
+        return deferred.promise;
+    };
 
-        this.findOneAndUpdate({_id: id}, model, {new: true}, function(error, company){
-                if (error) {
-                    deferred.reject(new Error(error));
-                }
-                else {
-                    deferred.resolve(company);
-                }
-            });
+    CompanyModel.deleteById = function(id) {
+        var deferred = Q.defer();
+        this.find({ _id: id })
+            .remove()
+            .exec(this.deferredCallback(deferred));
+        return deferred.promise;
+    };
 
+    CompanyModel.savePromise = function(model) {
+        var deferred = Q.defer();
+        model.save(this.deferredCallback(deferred));
         return deferred.promise;
     };
 

@@ -1,0 +1,19 @@
+{
+  "name": "Joe Chelsea",
+  "address": "405 W 23rd St",
+  "city": "New York",
+  "state": "NY",
+  "zip": "10011",
+  "latitude": 40.746811,
+  "longitude": -74.001532,
+  "checkinCode": "JOECHELSEA",
+  "openDays": "0,1,2,3,4,5,6",
+  "openHour": 7,
+  "openMinute": 0,
+  "openDurationHours": 13,
+  "openDurationMinutes": 0,
+  "timezone": "America/New_York",
+  "scheduleEnabled": false,
+  "checkinMessage": "Welcome to Joe Chelsea",
+  "rewardMessage": "Thank You!"
+}

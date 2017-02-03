@@ -27,84 +27,65 @@ module.exports = function(mongoose) {
 
     var LocationModel = mongoose.model('Location', LocationSchema);
 
+    LocationModel.deferredCallback = function(deferred) {
+        return function(error, res) {
+            if (error)
+                deferred.reject(new Error(error));
+            else
+                deferred.resolve(res);
+        };
+    };
+
     LocationModel.getByCompany = function(companyId) {
         var deferred = Q.defer();
-
         this.find({company: companyId})
-            .exec(function(error, locations){
-                if (error) {
-                    deferred.reject(new Error(error));
-                }
-                else {
-                    deferred.resolve(locations);
-                }
-            });
-
+            .populate('reward')
+            .exec(this.deferredCallback(deferred));
         return deferred.promise;
     };
 
     LocationModel.getByCheckinCode = function(checkinCode) {
         var deferred = Q.defer();
-
         this.findOne({checkinCode: checkinCode})
             .populate('company')
             .populate('promotion')
             .populate('reward')
-            .exec(function(error, location){
-                if (error) {
-                    deferred.reject(new Error(error));
-                }
-                else {
-                    deferred.resolve(location);
-                }
-            });
-
+            .exec(this.deferredCallback(deferred));
         return deferred.promise;
     };
 
     LocationModel.getById = function(id) {
         var deferred = Q.defer();
-
         this.findById(id)
-            .exec(function(error, location){
-                if (error) {
-                    deferred.reject(new Error(error));
-                }
-                else {
-                    deferred.resolve(location);
-                }
-            });
-
-        return deferred.promise;
-    };
-
-    LocationModel.savePromise = function(model) {
-        var deferred = Q.defer();
-
-        model.save(function(error, location){
-            if (error) {
-                deferred.reject(new Error(error));
-            }
-            else {
-                deferred.resolve(location);
-            }
-        });
-
+            .exec(this.deferredCallback(deferred));
         return deferred.promise;
     };
 
     LocationModel.updateById = function(id, model) {
         var deferred = Q.defer();
+        this.findOneAndUpdate({_id: id}, model, {new: true}, this.deferredCallback(deferred));
+        return deferred.promise;
+    };
 
-        this.findOneAndUpdate({_id: id}, model, {new: true}, function(error, location){
-            if (error) {
-                deferred.reject(new Error(error));
-            }
-            else {
-                deferred.resolve(location);
-            }
-        });
+    LocationModel.deleteByCompany = function(companyId) {
+        var deferred = Q.defer();
+        this.find({'company': companyId})
+            .remove()
+            .exec(this.deferredCallback(deferred));
+        return deferred.promise;
+    };
 
+    LocationModel.deleteById = function(id) {
+        var deferred = Q.defer();
+        this.find({ _id: id })
+            .remove()
+            .exec(this.deferredCallback(deferred));
+        return deferred.promise;
+    };
+
+    LocationModel.savePromise = function(model) {
+        var deferred = Q.defer();
+        model.save(this.deferredCallback(deferred));
         return deferred.promise;
     };
 
