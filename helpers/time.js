@@ -1,64 +1,51 @@
-var helpers = {};
-var moment = require('moment');
-var time = require('time');
+const helpers = {};
+const moment = require('moment');
+const time = require('time');
 
 helpers.checkinsTodayFilter = function(checkin) {
-    var startOfDay = moment().startOf('day');
+    const startOfDay = moment().startOf('day');
     return moment(checkin.date).isAfter(startOfDay);
 };
 
 helpers.checkinsLastTwoHoursFilter = function(checkin) {
-    var twoHoursAgo = moment().subtract(2,'hours');
+    const twoHoursAgo = moment().subtract(2,'hours');
     return moment(checkin.date).isAfter(twoHoursAgo);
 };
 
 helpers.getLocationOpenNow = function(location) {
-    if (!location.scheduleEnabled)
+    if (!location.scheduleEnabled || !location.hours.length)
         return true;
 
-    if (!location.openHour && !location.openDays)
-        return true;
+    let openNow = false,
+        now = new time.Date();
 
-    var openToday = false,
-        openNow = false,
-        openPastMidnight = location.openHour + location.openDurationHours >= 24;
-
-    var now = new time.Date();
     if (location.timezone)
         now.setTimezone(location.timezone);
 
-    if (location.openDays) {
-        var days = location.openDays.split(',');
-        for (i = 0; i < days.length; i++){
-            var day = parseInt(days[i]);
-            if (day === now.getDay())
-                openToday = true;
-            else if (openPastMidnight && day + 1 == now.getDay())
-                openToday = true;
-        }
-    } else {
-        openToday = true;
+    const today = location.hours.filter( (hours) => hours.day === now.getDay() )[0];
+
+    if (today) {
+        const openTime = today.openTime.split(':'),
+            openMinutes = Number(openTime[0]) * 60 + Number(openTime[1]),
+            closeTime = openMinutes + ( today.openDuration * 60 ),
+            nowMinutes = now.getHours() * 60 + now.getMinutes();
+
+        openNow = nowMinutes >= openMinutes && nowMinutes < closeTime;
     }
 
-    if (location.openHour) {
-        if (openToday && now.getHours() >= location.openHour) {
-            var openMinute = location.openMinute || 0,
-                openTime = new time.Date();
+    // Handle open past midnight situations
+    if (!openNow) {
+        const yesterday = location.hours.filter( (hours) => hours.day === now.getDay() - 1 )[0];
 
-            openTime.setHours(location.openHour, openMinute);
-            if (location.timezone)
-                openTime.setTimezone(location.timezone, true);
+        if (yesterday) {
+            const openTime = yesterday.openTime.split(':'),
+                closeTime = Number(openTime[0]) * 60 + Number(openTime[1]) + ( yesterday.openDuration * 60 ),
+                nowMinutes = now.getHours() * 60 + now.getMinutes();
 
-            var closeTime = new time.Date(openTime.getTime());
-            closeTime.setHours(closeTime.getHours() + location.openDurationHours, closeTime.getMinutes() + location.openDurationMinutes);
-            if (location.timezone)
-                openTime.setTimezone(location.timezone, true);
-
-            if (now < closeTime)
-                openNow = true;
+            if (closeTime > 1440) {
+                openNow = nowMinutes < ( closeTime - 1440 );
+            }
         }
-    } else {
-        openNow = true;
     }
 
     return openNow;
