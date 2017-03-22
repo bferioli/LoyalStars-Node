@@ -1,6 +1,7 @@
 const helpers = {};
 const moment = require('moment');
 const time = require('time');
+const Q = require('q');
 
 helpers.checkinsTodayFilter = (checkin) => {
     const startOfDay = moment().startOf('day');
@@ -49,6 +50,31 @@ helpers.getLocationOpenNow = (location) => {
     }
 
     return openNow;
+};
+
+helpers.timeFence = ({ checkins, location, user }) => {
+    const deferred = Q.defer();
+
+    // Pass for super users
+    if (user && user.superUser) {
+        deferred.resolve();
+        return deferred.promise;
+    }
+
+    const checkinsToday = checkins.filter(helpers.checkinsTodayFilter);
+    const checkinsLastTwoHours = checkins.filter(helpers.checkinsLastTwoHoursFilter);
+    const locationOpenNow = helpers.getLocationOpenNow(location);
+
+    if (!locationOpenNow)
+        deferred.reject( new Error('This location is not currently open.') );
+    else if (checkinsToday.length >= 2)
+        deferred.reject( new Error('You cannot check in here more than twice daily.') );
+    else if (checkinsLastTwoHours.length >= 1)
+        deferred.reject( new Error('You cannot check in here more than once within two hours.') );
+    else
+        deferred.resolve();
+
+    return deferred.promise;
 };
 
 module.exports = helpers;

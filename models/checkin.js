@@ -49,10 +49,6 @@ module.exports = function(mongoose) {
     CheckinModel.getByPhoneAtCompany = function(company, phone) {
         const deferred = Q.defer();
         this.find({'phone': phone, 'company': company._id})
-            .populate('location')
-            .populate('user')
-            .populate('promotion')
-            .populate('reward')
             .exec(this.deferredCallback(deferred));
         return deferred.promise;
     };
@@ -60,10 +56,6 @@ module.exports = function(mongoose) {
     CheckinModel.getByPhoneAtLocation = function(location, phone) {
         const deferred = Q.defer();
         this.find({'phone': phone, 'location': location._id})
-            .populate('location')
-            .populate('user')
-            .populate('promotion')
-            .populate('reward')
             .exec(this.deferredCallback(deferred));
         return deferred.promise;
     };

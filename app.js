@@ -34,6 +34,7 @@ app.SubscriptionModel = require('./models/subscription.js')(mongoose);
 app.UserModel = require('./models/user.js')(mongoose);
 
 app.ErrorHelpers = require('./helpers/error.js');
+app.GeoHelpers = require('./helpers/geolocation.js');
 app.PhoneHelpers = require('./helpers/phone.js');
 app.TemplateHelpers = require('./helpers/template.js');
 app.TimeHelpers = require('./helpers/time.js');
@@ -43,7 +44,7 @@ app.TimeHelpers = require('./helpers/time.js');
 const CheckinRoute = require('./routes/api/checkins/checkin')(app);
 const ConfirmRoute = require('./routes/api/checkins/confirm')(app);
 app.get("/api/checkin/:checkinCode/:phone", CheckinRoute);
-app.get("/api/checkin/:checkinCode/:phone/confirm", ConfirmRoute);
+app.post("/api/checkin/:checkinCode/:phone/confirm", ConfirmRoute);
 
 // Reward Flow Routes
 
