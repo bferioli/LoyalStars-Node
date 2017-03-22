@@ -1,24 +1,29 @@
-const moment = require('moment');
-const Q = require('q');
+const ErrorHelpers = require('../../../helpers/error.js');
+const GeoHelpers = require('../../../helpers/geolocation.js');
+const PhoneHelpers = require('../../../helpers/phone.js');
+const TemplateHelpers = require('../../../helpers/template.js');
+const TimeHelpers = require('../../../helpers/time.js');
 
 module.exports = (app) => {
     const ConfirmRoute = (req, res) => {
         const data = {};
-        const phone = req.params.phone ? app.PhoneHelpers.decodePhone(req.params.phone) : '';
+        const phone = req.params.phone ? PhoneHelpers.decodePhone(req.params.phone) : '';
 
-
-        Q.all([ app.LocationModel.getByCheckinCode(req.params.checkinCode),
-                app.UserModel.getByPhone(phone) ])
-            .spread( (location, user) => {
+        Promise
+            .all([
+                app.LocationModel.getByCheckinCode(req.params.checkinCode),
+                app.UserModel.getByPhone(phone)
+            ])
+            .then( ([location, user]) => {
                 data.location = location;
                 data.user = user || {};
                 if (req.body.superUser) data.user.superUser = true;
                 return app.CheckinModel.getByPhoneAtCompany(location.company, phone);
             })
             .then( (checkins) => {
-                return Q.all([
-                    app.GeoHelpers.geoFence({ request: req.body, location: data.location, user: data.user }),
-                    app.TimeHelpers.timeFence({ checkins, location: data.location, user: data.user })
+                return Promise.all([
+                    GeoHelpers.geoFence({ request: req.body, location: data.location, user: data.user }),
+                    TimeHelpers.timeFence({ checkins, location: data.location, user: data.user })
                 ]);
             })
             .then( () => {
@@ -46,9 +51,9 @@ module.exports = (app) => {
                 data.checkinsRequired = data.location.reward.checkinsRequired;
                 data.checkinsTowardsReward = data.totalCheckins % data.checkinsRequired;
                 data.rewardEarned = ( data.checkinsTowardsReward == 0 && data.totalCheckins > 0 );
-                data.rowWidth = app.TemplateHelpers.getRowWidth(data.checkinsRequired);
+                data.rowWidth = TemplateHelpers.getRowWidth(data.checkinsRequired);
                 data.rowRange = parseInt(1 + Math.floor(data.checkinsRequired / data.rowWidth));
-                data.theme = app.TemplateHelpers.getTheme('orange');
+                data.theme = TemplateHelpers.getTheme('orange');
 
                 if (data.rewardEarned) {
                     const reward = new app.RewardModel({
@@ -60,21 +65,18 @@ module.exports = (app) => {
 
                     return app.RewardModel.savePromise(reward);
                 } else {
-                    const deferred = Q.defer();
-                    deferred.resolve();
-                    return deferred.promise;
+                    return Promise.resolve();
                 }
             })
             .then( (reward) => {
                 if (reward) {
                     data.reward = reward;
-                    app.PhoneHelpers.sendRewardMessage(data, phone);
+                    PhoneHelpers.sendRewardMessage(data, phone);
                 }
 
                 res.json(data);
             })
-            .catch(app.ErrorHelpers.notFound(res))
-            .done();
+            .catch(ErrorHelpers.notFound(res));
     };
 
     return ConfirmRoute;

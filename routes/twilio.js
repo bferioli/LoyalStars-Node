@@ -1,11 +1,12 @@
 const twilio = require('twilio');
+const PhoneHelpers = require('../helpers/phone.js');
 
 module.exports = (app) => {
     const TwilioRoute = (req, res) => {
         const data = {},
             body = req.body.Body,
             phone = req.body.From.substring(2),
-            phoneEncoded = app.PhoneHelpers.encodePhone(phone),
+            phoneEncoded = PhoneHelpers.encodePhone(phone),
             twiml = new twilio.TwimlResponse();
 
         app.LocationModel.getByCheckinCode(body.toUpperCase())

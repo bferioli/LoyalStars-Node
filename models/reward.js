@@ -1,5 +1,3 @@
-const Q = require('q');
-
 module.exports = function(mongoose) {
     const RewardSchema = mongoose.Schema({
         company: { type: mongoose.Schema.Types.ObjectId, ref: 'Company' },
@@ -12,71 +10,48 @@ module.exports = function(mongoose) {
 
     const RewardModel = mongoose.model('Reward', RewardSchema);
 
-    RewardModel.deferredCallback = function(deferred) {
-        return function(error, res) {
-            if (error)
-                deferred.reject(new Error(error));
-            else
-                deferred.resolve(res);
-        };
-    };
-
     RewardModel.getAll = function() {
-        const deferred = Q.defer();
-        this.find()
-            .populate('companyReward')
-            .exec(this.deferredCallback(deferred));
-        return deferred.promise;
+        const query = this.find()
+            .populate('companyReward');
+        return query.exec();
     };
 
     RewardModel.getByCompany = function(companyId) {
-        const deferred = Q.defer();
-        this.find({company: companyId})
-            .populate('companyReward')
-            .exec(this.deferredCallback(deferred));
-        return deferred.promise;
+        const query = this.find({company: companyId})
+            .populate('companyReward');
+        return query.exec();
     };
 
     RewardModel.getByLocation = function(locationId) {
-        const deferred = Q.defer();
-        this.find({location: locationId})
-            .populate('companyReward')
-            .exec(this.deferredCallback(deferred));
-        return deferred.promise;
+        const query = this.find({location: locationId})
+            .populate('companyReward');
+        return query.exec();
     };
 
     RewardModel.getByPhone = function(phone) {
-        const deferred = Q.defer();
-        this.findOne({phone: phone, redeemed: null})
+        const query = this.findOne({phone: phone, redeemed: null})
             .populate('company')
             .populate('companyReward')
-            .populate('location')
-            .exec(this.deferredCallback(deferred));
-        return deferred.promise;
+            .populate('location');
+        return query.exec();
     };
 
     RewardModel.getById = function(id) {
-        const deferred = Q.defer();
-        this.findById(id)
+        const query = this.findById(id)
             .populate('company')
             .populate('companyReward')
-            .populate('location')
-            .exec(this.deferredCallback(deferred));
-        return deferred.promise;
+            .populate('location');
+        return query.exec();
     };
 
     RewardModel.deleteByCompany = function(companyId) {
-        const deferred = Q.defer();
-        this.find({'company': companyId})
-            .remove()
-            .exec(this.deferredCallback(deferred));
-        return deferred.promise;
+        const query = this.find({'company': companyId})
+            .remove();
+        return query.exec();
     };
 
     RewardModel.savePromise = function(model) {
-        const deferred = Q.defer();
-        model.save(this.deferredCallback(deferred));
-        return deferred.promise;
+        return model.save();
     };
 
     return RewardModel;

@@ -1,3 +1,5 @@
+const ErrorHelpers = require('../../../helpers/error.js');
+
 module.exports = (app) => {
     const CreateLocationRoute = (req, res) => {
 
@@ -6,14 +8,12 @@ module.exports = (app) => {
         app.CompanyModel.getById(req.params.companyId)
             .then( (company) => {
                 model.set({company: company._id});
-                app.LocationModel.savePromise(model)
-                    .then( (location) => {
-                        res.json(location);
-                    })
-                    .catch(app.ErrorHelpers.notFound(res))
-                    .done();
+                return app.LocationModel.savePromise(model);
             })
-            .catch(app.ErrorHelpers.notFound(res))
+            .then( (location) => {
+                res.json(location);
+            })
+            .catch(ErrorHelpers.notFound(res))
             .done();
     };
 

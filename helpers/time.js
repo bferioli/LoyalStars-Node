@@ -1,7 +1,6 @@
 const helpers = {};
 const moment = require('moment');
 const time = require('time');
-const Q = require('q');
 
 helpers.checkinsTodayFilter = (checkin) => {
     const startOfDay = moment().startOf('day');
@@ -17,8 +16,8 @@ helpers.getLocationOpenNow = (location) => {
     if (!location.scheduleEnabled || !location.hours.length)
         return true;
 
-    let openNow = false,
-        now = new time.Date();
+    let openNow = false;
+    const now = new time.Date();
 
     if (location.timezone)
         now.setTimezone(location.timezone);
@@ -53,28 +52,24 @@ helpers.getLocationOpenNow = (location) => {
 };
 
 helpers.timeFence = ({ checkins, location, user }) => {
-    const deferred = Q.defer();
+    return new Promise( (resolve, reject) => {
+        // Pass for super users
+        if (user && user.superUser)
+            return resolve();
 
-    // Pass for super users
-    if (user && user.superUser) {
-        deferred.resolve();
-        return deferred.promise;
-    }
+        const checkinsToday = checkins.filter(helpers.checkinsTodayFilter);
+        const checkinsLastTwoHours = checkins.filter(helpers.checkinsLastTwoHoursFilter);
+        const locationOpenNow = helpers.getLocationOpenNow(location);
 
-    const checkinsToday = checkins.filter(helpers.checkinsTodayFilter);
-    const checkinsLastTwoHours = checkins.filter(helpers.checkinsLastTwoHoursFilter);
-    const locationOpenNow = helpers.getLocationOpenNow(location);
-
-    if (!locationOpenNow)
-        deferred.reject( new Error('This location is not currently open.') );
-    else if (checkinsToday.length >= 2)
-        deferred.reject( new Error('You cannot check in here more than twice daily.') );
-    else if (checkinsLastTwoHours.length >= 1)
-        deferred.reject( new Error('You cannot check in here more than once within two hours.') );
-    else
-        deferred.resolve();
-
-    return deferred.promise;
+        if (!locationOpenNow)
+            reject(new Error('This location is not currently open.'));
+        else if (checkinsToday.length >= 2)
+            reject(new Error('You cannot check in here more than twice daily.'));
+        else if (checkinsLastTwoHours.length >= 1)
+            reject(new Error('You cannot check in here more than once within two hours.'));
+        else
+            resolve();
+    });
 };
 
 module.exports = helpers;

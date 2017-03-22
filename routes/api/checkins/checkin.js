@@ -1,13 +1,16 @@
+const ErrorHelpers = require('../../../helpers/error.js');
+const PhoneHelpers = require('../../../helpers/phone.js');
+const TemplateHelpers = require('../../../helpers/template.js');
+
 module.exports = (app) => {
     const CheckinRoute = (req, res) => {
         const data = {},
-            phone = req.params.phone ? app.PhoneHelpers.decodePhone(req.params.phone) : '';
+            phone = req.params.phone ? PhoneHelpers.decodePhone(req.params.phone) : '';
 
         app.LocationModel.getByCheckinCode(req.params.checkinCode)
             .then( (location) => {
                 if (!location) {
-                    app.ErrorHelpers.notFound(res)('Location not found.');
-                    return;
+                    return Promise.reject('Location not found.');
                 }
                 data.location = location;
                 return app.CheckinModel.getByPhoneAtCompany(location.company, phone);
@@ -18,13 +21,13 @@ module.exports = (app) => {
                 data.checkinsRequired = data.location.reward.checkinsRequired;
                 data.checkinsEarned = data.totalCheckins % data.checkinsRequired;
                 data.rewardEarned = ( data.checkinsEarned == 0 && data.totalCheckins > 0 );
-                data.rowWidth = app.TemplateHelpers.getRowWidth( data.checkinsRequired );
+                data.rowWidth = TemplateHelpers.getRowWidth( data.checkinsRequired );
                 data.rowRange = parseInt( 1 + Math.floor( data.checkinsRequired / data.rowWidth ) );
-                data.theme = app.TemplateHelpers.getTheme('orange');
+                data.theme = TemplateHelpers.getTheme('orange');
 
                 res.json(data);
             })
-            .catch(app.ErrorHelpers.notFound(res))
+            .catch(ErrorHelpers.notFound(res))
             .done();
     };
 

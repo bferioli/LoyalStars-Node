@@ -1,5 +1,3 @@
-const Q = require('q');
-
 module.exports = function(mongoose) {
     const CheckinSchema = mongoose.Schema({
         company: { type: mongoose.Schema.Types.ObjectId, ref: 'Company' },
@@ -16,62 +14,39 @@ module.exports = function(mongoose) {
 
     const CheckinModel = mongoose.model('Checkin', CheckinSchema);
 
-    CheckinModel.deferredCallback = function(deferred) {
-        return function(error, res) {
-            if (error)
-                deferred.reject(new Error(error));
-            else
-                deferred.resolve(res);
-        };
-    };
-
     CheckinModel.getAll = function() {
-        const deferred = Q.defer();
-        this.find()
-            .exec(this.deferredCallback(deferred));
-        return deferred.promise;
+        const query = this.find();
+        return query.exec();
     };
 
     CheckinModel.getByCompany = function(companyId) {
-        const deferred = Q.defer();
-        this.find({'company': companyId})
-            .exec(this.deferredCallback(deferred));
-        return deferred.promise;
+        const query = this.find({'company': companyId});
+        return query.exec();
     };
 
     CheckinModel.getByLocation = function(locationId) {
-        const deferred = Q.defer();
-        this.find({'location': locationId})
-            .exec(this.deferredCallback(deferred));
-        return deferred.promise;
+        const query = this.find({'location': locationId});
+        return query.exec();
     };
 
     CheckinModel.getByPhoneAtCompany = function(company, phone) {
-        const deferred = Q.defer();
-        this.find({'phone': phone, 'company': company._id})
-            .exec(this.deferredCallback(deferred));
-        return deferred.promise;
+        const query = this.find({'phone': phone, 'company': company._id});
+        return query.exec();
     };
 
     CheckinModel.getByPhoneAtLocation = function(location, phone) {
-        const deferred = Q.defer();
-        this.find({'phone': phone, 'location': location._id})
-            .exec(this.deferredCallback(deferred));
-        return deferred.promise;
+        const query = this.find({'phone': phone, 'location': location._id});
+        return query.exec();
     };
 
     CheckinModel.deleteByCompany = function(companyId) {
-        const deferred = Q.defer();
-        this.find({'company': companyId})
-            .remove()
-            .exec(this.deferredCallback(deferred));
-        return deferred.promise;
+        const query = this.find({'company': companyId})
+            .remove();
+        return query.exec();
     };
 
     CheckinModel.savePromise = function(model) {
-        const deferred = Q.defer();
-        model.save(this.deferredCallback(deferred));
-        return deferred.promise;
+        return model.save();
     };
 
     return CheckinModel;

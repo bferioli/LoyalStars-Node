@@ -10,6 +10,7 @@ const mongoose = require('mongoose');
 
 const app = express();
 
+mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://127.0.0.1:27017/LoyalStars');
 
 // view engine setup
@@ -32,12 +33,6 @@ app.PromotionModel = require('./models/promotion.js')(mongoose);
 app.RewardModel = require('./models/reward.js')(mongoose);
 app.SubscriptionModel = require('./models/subscription.js')(mongoose);
 app.UserModel = require('./models/user.js')(mongoose);
-
-app.ErrorHelpers = require('./helpers/error.js');
-app.GeoHelpers = require('./helpers/geolocation.js');
-app.PhoneHelpers = require('./helpers/phone.js');
-app.TemplateHelpers = require('./helpers/template.js');
-app.TimeHelpers = require('./helpers/time.js');
 
 // Checkin flow routes
 

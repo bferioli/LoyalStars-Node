@@ -1,5 +1,3 @@
-const Q = require('q');
-
 module.exports = function(mongoose) {
     const UserSchema = mongoose.Schema({
         name: String,
@@ -15,22 +13,11 @@ module.exports = function(mongoose) {
 
     const UserModel = mongoose.model('User', UserSchema);
 
-    UserModel.deferredCallback = function(deferred) {
-        return function(error, res) {
-            if (error)
-                deferred.reject(new Error(error));
-            else
-                deferred.resolve(res);
-        };
-    };
-
     UserModel.getByPhone = function(phone) {
-        const deferred = Q.defer();
-        this.findOne({phone: phone})
+        const query = this.findOne({phone: phone})
             .populate('companies')
-            .populate('subscriptions')
-            .exec(this.deferredCallback(deferred));
-        return deferred.promise;
+            .populate('subscriptions');
+        return query.exec();
     };
 
     return UserModel;

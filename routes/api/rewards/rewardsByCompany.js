@@ -1,3 +1,5 @@
+const ErrorHelpers = require('../../../helpers/error.js');
+
 module.exports = (app) => {
 
     const RewardsByCompanyRoute = (req, res) => {
@@ -6,7 +8,7 @@ module.exports = (app) => {
             .then( (rewards) => {
                 res.json(rewards);
             })
-            .catch(app.ErrorHelpers.notFound(res))
+            .catch(ErrorHelpers.notFound(res))
             .done();
     };
 

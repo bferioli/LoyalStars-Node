@@ -1,3 +1,5 @@
+const ErrorHelpers = require('../../../helpers/error.js');
+
 module.exports = (app) => {
     const DeleteCompanyRoute = (req, res) => {
 
@@ -17,7 +19,7 @@ module.exports = (app) => {
             .then( () => {
                 res.json({ deleted: true });
             })
-            .catch(app.ErrorHelpers.notFound(res))
+            .catch(ErrorHelpers.notFound(res))
             .done();
     };
 

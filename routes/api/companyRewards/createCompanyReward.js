@@ -1,3 +1,5 @@
+const ErrorHelpers = require('../../../helpers/error.js');
+
 module.exports = (app) => {
     const CreateCompanyRewardRoute = (req, res) => {
 
@@ -6,14 +8,12 @@ module.exports = (app) => {
         app.CompanyModel.getById(req.params.companyId)
             .then( (company) => {
                 model.set({company: company._id});
-                app.CompanyRewardModel.savePromise(model)
-                    .then( (companyReward) => {
-                        res.json(companyReward);
-                    })
-                    .catch(app.ErrorHelpers.notFound(res))
-                    .done();
+                return app.CompanyRewardModel.savePromise(model);
             })
-            .catch(app.ErrorHelpers.notFound(res))
+            .then( (companyReward) => {
+                res.json(companyReward);
+            })
+            .catch(ErrorHelpers.notFound(res))
             .done();
     };
 
