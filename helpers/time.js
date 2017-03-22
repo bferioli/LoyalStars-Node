@@ -2,17 +2,17 @@ const helpers = {};
 const moment = require('moment');
 const time = require('time');
 
-helpers.checkinsTodayFilter = function(checkin) {
+helpers.checkinsTodayFilter = (checkin) => {
     const startOfDay = moment().startOf('day');
     return moment(checkin.date).isAfter(startOfDay);
 };
 
-helpers.checkinsLastTwoHoursFilter = function(checkin) {
+helpers.checkinsLastTwoHoursFilter = (checkin) => {
     const twoHoursAgo = moment().subtract(2,'hours');
     return moment(checkin.date).isAfter(twoHoursAgo);
 };
 
-helpers.getLocationOpenNow = function(location) {
+helpers.getLocationOpenNow = (location) => {
     if (!location.scheduleEnabled || !location.hours.length)
         return true;
 
