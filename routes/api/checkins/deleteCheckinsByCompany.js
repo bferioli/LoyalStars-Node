@@ -1,9 +1,8 @@
-module.exports = function (app) {
-
-    var DeleteCheckinsByCompanyRoute = function(req, res){
+module.exports = (app) => {
+    const DeleteCheckinsByCompanyRoute = (req, res) => {
 
         app.CheckinModel.deleteByCompany(req.params.companyId)
-            .then(function(){
+            .then( () => {
                 res.json({ deleted: true });
             })
             .catch(app.ErrorHelpers.notFound(res))

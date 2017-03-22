@@ -1,10 +1,10 @@
-module.exports = function (app) {
-    var CheckinRoute = function(req, res){
-        var data = {},
+module.exports = (app) => {
+    const CheckinRoute = (req, res) => {
+        const data = {},
             phone = req.params.phone ? app.PhoneHelpers.decodePhone(req.params.phone) : '';
 
         app.LocationModel.getByCheckinCode(req.params.checkinCode)
-            .then(function(location){
+            .then( (location) => {
                 if (!location) {
                     app.ErrorHelpers.notFound(res)('Location not found.');
                     return;
@@ -12,7 +12,7 @@ module.exports = function (app) {
                 data.location = location;
                 return app.CheckinModel.getByPhoneAtCompany(location.company, phone);
             })
-            .then(function(checkins){
+            .then( (checkins) => {
                 data.checkins = checkins;
                 data.totalCheckins = checkins.length;
                 data.checkinsRequired = data.location.reward.checkinsRequired;
@@ -27,6 +27,6 @@ module.exports = function (app) {
             .catch(app.ErrorHelpers.notFound(res))
             .done();
     };
-    
+
     return CheckinRoute;
 };

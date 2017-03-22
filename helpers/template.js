@@ -1,7 +1,7 @@
-var helpers = {};
+const helpers = {};
 
-helpers.getRowWidth = function(checkinsRequired) {
-    var rowWidth;
+helpers.getRowWidth = (checkinsRequired) => {
+    let rowWidth;
     if (checkinsRequired < 8)
         rowWidth = checkinsRequired;
     else if (checkinsRequired % 2 === 0)
@@ -11,7 +11,7 @@ helpers.getRowWidth = function(checkinsRequired) {
     return rowWidth;
 };
 
-helpers.getTheme = function(color) {
+helpers.getTheme = (color) => {
     var themes = {
         'orange': {
             'class': 'orange',

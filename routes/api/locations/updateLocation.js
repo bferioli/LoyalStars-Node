@@ -1,8 +1,8 @@
-module.exports = function (app) {
-    var UpdateLocationRoute = function(req, res){
+module.exports = (app) => {
+    const UpdateLocationRoute = (req, res) => {
 
         app.LocationModel.updateById(req.params.locationId, req.body)
-            .then(function(location){
+            .then( (location) => {
                 res.json(location);
             })
             .catch(app.ErrorHelpers.notFound(res))

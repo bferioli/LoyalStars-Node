@@ -1,10 +1,10 @@
-module.exports = function (app) {
-    var CreateCompanyRoute = function (req, res) {
+module.exports = (app) => {
+    const CreateCompanyRoute = (req, res) => {
 
-        var model = new app.CompanyModel(req.body);
+        const model = new app.CompanyModel(req.body);
 
         app.CompanyModel.savePromise(model)
-            .then(function(company){
+            .then( (company) => {
                 res.json(company);
             })
             .catch(app.ErrorHelpers.notFound(res))

@@ -1,8 +1,8 @@
-module.exports = function (app) {
-    var CheckinsRoute = function(req, res){
+module.exports = (app) => {
+    const CheckinsRoute = (req, res) => {
 
         app.CheckinModel.getAll()
-            .then(function(companies){
+            .then( (companies) => {
                 res.json(companies);
             })
             .catch(app.ErrorHelpers.notFound(res))

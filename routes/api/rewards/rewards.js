@@ -1,8 +1,8 @@
-module.exports = function (app) {
-    var RewardsRoute = function(req, res){
+module.exports = (app) => {
+    const RewardsRoute = (req, res) => {
 
         app.RewardModel.getAll()
-            .then(function(rewards){
+            .then( (rewards) => {
                 res.json(rewards);
             })
             .catch(app.ErrorHelpers.notFound(res))

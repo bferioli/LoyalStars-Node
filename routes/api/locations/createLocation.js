@@ -1,13 +1,13 @@
-module.exports = function (app) {
-    var CreateLocationRoute = function (req, res) {
+module.exports = (app) => {
+    const CreateLocationRoute = (req, res) => {
 
-        var model = new app.LocationModel(req.body);
+        const model = new app.LocationModel(req.body);
 
         app.CompanyModel.getById(req.params.companyId)
-            .then(function(company){
+            .then( (company) => {
                 model.set({company: company._id});
                 app.LocationModel.savePromise(model)
-                    .then(function(location){
+                    .then( (location) => {
                         res.json(location);
                     })
                     .catch(app.ErrorHelpers.notFound(res))

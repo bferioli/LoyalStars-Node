@@ -1,9 +1,8 @@
-module.exports = function (app) {
-
-    var CheckinsByCompanyRoute = function(req, res){
+module.exports = (app) => {
+    var CheckinsByCompanyRoute = (req, res) => {
 
         app.CheckinModel.getByCompany(req.params.companyId)
-            .then(function(checkins){
+            .then( (checkins) => {
                 res.json(checkins);
             })
             .catch(app.ErrorHelpers.notFound(res))

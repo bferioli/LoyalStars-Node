@@ -1,8 +1,8 @@
-module.exports = function (app) {
-    var CompanyRoute = function(req, res){;
+module.exports = (app) => {
+    const CompanyRoute = (req, res) => {
 
         app.CompanyModel.getById(req.params.companyId)
-            .then(function(company){
+            .then( (company) => {
                 res.json(company);
             })
             .catch(app.ErrorHelpers.notFound(res))

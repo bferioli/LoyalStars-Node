@@ -1,8 +1,8 @@
-module.exports = function (app) {
-    var CompanyRewardsRoute = function(req, res){
+module.exports = (app) => {
+    const CompanyRewardsRoute = (req, res) => {
 
         app.CompanyRewardModel.getByCompany(req.params.companyId)
-            .then(function(companyRewards){
+            .then( (companyRewards) => {
                 res.json(companyRewards);
             })
             .catch(app.ErrorHelpers.notFound(res))

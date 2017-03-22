@@ -1,22 +1,22 @@
-var moment = require('moment');
+const moment = require('moment');
 
-module.exports = function (app) {
-    var ConfirmRoute = function (req, res) {
-        var data = {},
+module.exports = (app) => {
+    const ConfirmRoute = (req, res) => {
+        const data = {},
             phone = req.params.phone ? app.PhoneHelpers.decodePhone(req.params.phone) : '';
 
         app.LocationModel.getByCheckinCode(req.params.checkinCode)
-            .then(function (location) {
+            .then( (location) => {
                 data.location = location;
                 return app.CheckinModel.getByPhoneAtCompany(location.company, phone);
             })
-            .then(function (checkins) {
+            .then( (checkins) => {
                 data.checkins = checkins;
                 return app.UserModel.getByPhone(phone)
             })
-            .then(function (user) {
+            .then( (user) => {
                 if (!user || !user.superUser) {
-                    var checkinsToday = data.checkins.filter(app.TimeHelpers.checkinsTodayFilter),
+                    const checkinsToday = data.checkins.filter(app.TimeHelpers.checkinsTodayFilter),
                         checkinsLastTwoHours = data.checkins.filter(app.TimeHelpers.checkinsLastTwoHoursFilter),
                         locationOpenNow = app.TimeHelpers.getLocationOpenNow(data.location);
 
@@ -47,7 +47,7 @@ module.exports = function (app) {
                     }
                 }
 
-                var checkin = new app.CheckinModel({
+                const checkin = new app.CheckinModel({
                     company: data.location.company._id,
                     location: data.location._id,
                     phone: phone,
@@ -61,10 +61,10 @@ module.exports = function (app) {
                     checkin.user = user._id;
 
                 app.CheckinModel.savePromise(checkin)
-                    .then(function () {
+                    .then( () => {
                         return app.CheckinModel.getByPhoneAtCompany(data.location.company, phone);
                     })
-                    .then(function (checkins) {
+                    .then( (checkins) => {
                         data.checkins = checkins;
                         data.totalCheckins = checkins.length;
                         data.checkinsRequired = data.location.reward.checkinsRequired;
@@ -73,7 +73,7 @@ module.exports = function (app) {
                         data.theme = app.TemplateHelpers.getTheme('orange');
 
                         if (data.rewardEarned) {
-                            var reward = new app.RewardModel({
+                            const reward = new app.RewardModel({
                                 company: data.location.company._id,
                                 companyReward: data.location.reward._id,
                                 location: data.location._id,
@@ -81,11 +81,11 @@ module.exports = function (app) {
                             });
 
                             app.RewardModel.savePromise(reward)
-                                .then(function (saved) {
+                                .then( (saved) => {
                                     data.reward = saved;
                                     return app.PhoneHelpers.sendRewardMessage(data, phone);
                                 })
-                                .then(function(){
+                                .then( () => {
                                     res.json(data);
                                 })
                                 .catch(console.log)

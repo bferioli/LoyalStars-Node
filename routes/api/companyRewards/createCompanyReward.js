@@ -1,13 +1,13 @@
-module.exports = function (app) {
-    var CreateCompanyRewardRoute = function (req, res) {
+module.exports = (app) => {
+    const CreateCompanyRewardRoute = (req, res) => {
 
-        var model = new app.CompanyRewardModel(req.body);
+        const model = new app.CompanyRewardModel(req.body);
 
         app.CompanyModel.getById(req.params.companyId)
-            .then(function(company){
+            .then( (company) => {
                 model.set({company: company._id});
                 app.CompanyRewardModel.savePromise(model)
-                    .then(function(companyReward){
+                    .then( (companyReward) => {
                         res.json(companyReward);
                     })
                     .catch(app.ErrorHelpers.notFound(res))

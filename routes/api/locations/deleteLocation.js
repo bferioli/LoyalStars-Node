@@ -1,8 +1,8 @@
-module.exports = function (app) {
-    var DeleteLocationRoute = function(req, res){
+module.exports = (app) => {
+    const DeleteLocationRoute = (req, res) => {
 
         app.LocationModel.deleteById(req.params.locationId)
-            .then(function(){
+            .then( () => {
                 res.json({ deleted: true });
             })
             .catch(app.ErrorHelpers.notFound(res))

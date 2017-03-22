@@ -1,8 +1,8 @@
-module.exports = function (app) {
-    var LocationRoute = function(req, res){;
+module.exports = (app) => {
+    const LocationRoute = (req, res) => {
 
         app.LocationModel.getById(req.params.locationId)
-            .then(function(location){
+            .then( (location) => {
                 res.json(location);
             })
             .catch(app.ErrorHelpers.notFound(res))

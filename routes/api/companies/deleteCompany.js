@@ -1,20 +1,20 @@
-module.exports = function (app) {
-    var DeleteCompanyRoute = function(req, res){
+module.exports = (app) => {
+    const DeleteCompanyRoute = (req, res) => {
 
         app.CompanyModel.deleteById(req.params.companyId)
-            .then(function(){
+            .then( () => {
                 return app.CheckinModel.deleteByCompany(req.params.companyId);
             })
-            .then(function(){
+            .then( () => {
                 return app.CompanyRewardModel.deleteByCompany(req.params.companyId);
             })
-            .then(function(){
+            .then( () => {
                 return app.LocationModel.deleteByCompany(req.params.companyId);
             })
-            .then(function(){
+            .then( () => {
                 return app.RewardModel.deleteByCompany(req.params.companyId);
             })
-            .then(function(){
+            .then( () => {
                 res.json({ deleted: true });
             })
             .catch(app.ErrorHelpers.notFound(res))

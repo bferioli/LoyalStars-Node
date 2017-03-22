@@ -1,9 +1,7 @@
-module.exports = function (app) {
-
-    var CheckinsByLocationRoute = function(req, res){
-
+module.exports = (app) => {
+    var CheckinsByLocationRoute = (req, res) => {
         app.CheckinModel.getByLocation(req.params.locationId)
-            .then(function(checkins){
+            .then( (checkins) => {
                 res.json(checkins);
             })
             .catch(app.ErrorHelpers.notFound(res))

@@ -1,7 +1,7 @@
-var Q = require('q');
+const Q = require('q');
 
 module.exports = function(mongoose) {
-    var UserSchema = mongoose.Schema({
+    const UserSchema = mongoose.Schema({
         name: String,
         phone: String,
         email: String,
@@ -13,7 +13,7 @@ module.exports = function(mongoose) {
         subscriptions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Subscription' }]
     }, { collection: 'User' });
 
-    var UserModel = mongoose.model('User', UserSchema);
+    const UserModel = mongoose.model('User', UserSchema);
 
     UserModel.deferredCallback = function(deferred) {
         return function(error, res) {
@@ -25,7 +25,7 @@ module.exports = function(mongoose) {
     };
 
     UserModel.getByPhone = function(phone) {
-        var deferred = Q.defer();
+        const deferred = Q.defer();
         this.findOne({phone: phone})
             .populate('companies')
             .populate('subscriptions')

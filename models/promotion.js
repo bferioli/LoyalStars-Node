@@ -1,5 +1,5 @@
 module.exports = function(mongoose) {
-    var PromotionSchema = mongoose.Schema({
+    const PromotionSchema = mongoose.Schema({
         company: { type: mongoose.Schema.Types.ObjectId, ref: 'Company' },
         checkinHeading: String,
         checkinBody: String,
@@ -7,7 +7,7 @@ module.exports = function(mongoose) {
         confirmBody: String
     }, { collection: 'Promotion' });
 
-    var PromotionModel = mongoose.model('Promotion', PromotionSchema);
+    const PromotionModel = mongoose.model('Promotion', PromotionSchema);
 
     return PromotionModel;
 };

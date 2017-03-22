@@ -1,8 +1,8 @@
-var Q = require("q");
+const Q = require("q");
 
 module.exports = function(mongoose) {
 
-    var LocationSchema = mongoose.Schema({
+    const LocationSchema = mongoose.Schema({
         company: { type: mongoose.Schema.Types.ObjectId, ref: 'Company' },
         name: String,
         address: String,
@@ -21,7 +21,7 @@ module.exports = function(mongoose) {
         reward: { type: mongoose.Schema.Types.ObjectId, ref: 'CompanyReward' }
     }, { collection: 'Location' });
 
-    var LocationModel = mongoose.model('Location', LocationSchema);
+    const LocationModel = mongoose.model('Location', LocationSchema);
 
     LocationModel.deferredCallback = function(deferred) {
         return function(error, res) {
@@ -33,7 +33,7 @@ module.exports = function(mongoose) {
     };
 
     LocationModel.getByCompany = function(companyId) {
-        var deferred = Q.defer();
+        const deferred = Q.defer();
         this.find({company: companyId})
             .populate('reward')
             .exec(this.deferredCallback(deferred));
@@ -41,7 +41,7 @@ module.exports = function(mongoose) {
     };
 
     LocationModel.getByCheckinCode = function(checkinCode) {
-        var deferred = Q.defer();
+        const deferred = Q.defer();
         this.findOne({checkinCode: checkinCode})
             .populate('company')
             .populate('promotion')
@@ -51,20 +51,20 @@ module.exports = function(mongoose) {
     };
 
     LocationModel.getById = function(id) {
-        var deferred = Q.defer();
+        const deferred = Q.defer();
         this.findById(id)
             .exec(this.deferredCallback(deferred));
         return deferred.promise;
     };
 
     LocationModel.updateById = function(id, model) {
-        var deferred = Q.defer();
+        const deferred = Q.defer();
         this.findOneAndUpdate({_id: id}, model, {new: true}, this.deferredCallback(deferred));
         return deferred.promise;
     };
 
     LocationModel.deleteByCompany = function(companyId) {
-        var deferred = Q.defer();
+        const deferred = Q.defer();
         this.find({'company': companyId})
             .remove()
             .exec(this.deferredCallback(deferred));
@@ -72,7 +72,7 @@ module.exports = function(mongoose) {
     };
 
     LocationModel.deleteById = function(id) {
-        var deferred = Q.defer();
+        const deferred = Q.defer();
         this.find({ _id: id })
             .remove()
             .exec(this.deferredCallback(deferred));
@@ -80,7 +80,7 @@ module.exports = function(mongoose) {
     };
 
     LocationModel.savePromise = function(model) {
-        var deferred = Q.defer();
+        const deferred = Q.defer();
         model.save(this.deferredCallback(deferred));
         return deferred.promise;
     };

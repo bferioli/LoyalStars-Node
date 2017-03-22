@@ -1,8 +1,8 @@
-module.exports = function (app) {
-    var CompaniesRoute = function(req, res){
+module.exports = (app) => {
+    const CompaniesRoute = (req, res) => {
 
         app.CompanyModel.getAll()
-            .then(function(companies){
+            .then( (companies) => {
                 res.json(companies);
             })
             .catch(app.ErrorHelpers.notFound(res))

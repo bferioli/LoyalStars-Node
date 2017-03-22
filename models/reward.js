@@ -1,7 +1,7 @@
-var Q = require('q');
+const Q = require('q');
 
 module.exports = function(mongoose) {
-    var RewardSchema = mongoose.Schema({
+    const RewardSchema = mongoose.Schema({
         company: { type: mongoose.Schema.Types.ObjectId, ref: 'Company' },
         companyReward: { type: mongoose.Schema.Types.ObjectId, ref: 'CompanyReward' },
         location: { type: mongoose.Schema.Types.ObjectId, ref: 'Location' },
@@ -10,7 +10,7 @@ module.exports = function(mongoose) {
         phone: String
     }, { collection: 'Reward' });
 
-    var RewardModel = mongoose.model('Reward', RewardSchema);
+    const RewardModel = mongoose.model('Reward', RewardSchema);
 
     RewardModel.deferredCallback = function(deferred) {
         return function(error, res) {
@@ -22,7 +22,7 @@ module.exports = function(mongoose) {
     };
 
     RewardModel.getAll = function() {
-        var deferred = Q.defer();
+        const deferred = Q.defer();
         this.find()
             .populate('companyReward')
             .exec(this.deferredCallback(deferred));
@@ -30,7 +30,7 @@ module.exports = function(mongoose) {
     };
 
     RewardModel.getByCompany = function(companyId) {
-        var deferred = Q.defer();
+        const deferred = Q.defer();
         this.find({company: companyId})
             .populate('companyReward')
             .exec(this.deferredCallback(deferred));
@@ -38,7 +38,7 @@ module.exports = function(mongoose) {
     };
 
     RewardModel.getByLocation = function(locationId) {
-        var deferred = Q.defer();
+        const deferred = Q.defer();
         this.find({location: locationId})
             .populate('companyReward')
             .exec(this.deferredCallback(deferred));
@@ -46,7 +46,7 @@ module.exports = function(mongoose) {
     };
 
     RewardModel.getByPhone = function(phone) {
-        var deferred = Q.defer();
+        const deferred = Q.defer();
         this.findOne({phone: phone, redeemed: null})
             .populate('company')
             .populate('companyReward')
@@ -56,7 +56,7 @@ module.exports = function(mongoose) {
     };
 
     RewardModel.getById = function(id) {
-        var deferred = Q.defer();
+        const deferred = Q.defer();
         this.findById(id)
             .populate('company')
             .populate('companyReward')
@@ -66,7 +66,7 @@ module.exports = function(mongoose) {
     };
 
     RewardModel.deleteByCompany = function(companyId) {
-        var deferred = Q.defer();
+        const deferred = Q.defer();
         this.find({'company': companyId})
             .remove()
             .exec(this.deferredCallback(deferred));
@@ -74,7 +74,7 @@ module.exports = function(mongoose) {
     };
 
     RewardModel.savePromise = function(model) {
-        var deferred = Q.defer();
+        const deferred = Q.defer();
         model.save(this.deferredCallback(deferred));
         return deferred.promise;
     };

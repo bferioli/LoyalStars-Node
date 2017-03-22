@@ -1,8 +1,8 @@
-var helpers = {};
-var geolib = require('geolib');
+const helpers = {};
+const geolib = require('geolib');
 
-helpers.getLocationWithinRadius = function(locLat, locLon, lat, lon, accuracy) {
-    var distance = geolib.getDistance(
+helpers.getLocationWithinRadius = (locLat, locLon, lat, lon, accuracy) => {
+    const distance = geolib.getDistance(
             { latitude: locLat, longitude: locLon },
             { latitude: lat, longitude: lon }
         ),

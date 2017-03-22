@@ -1,8 +1,8 @@
-module.exports = function (app) {
-    var UpdateCompanyRewardRoute = function(req, res){
+module.exports = (app) => {
+    const UpdateCompanyRewardRoute = (req, res) => {
 
         app.CompanyRewardModel.updateById(req.params.companyRewardId, req.body)
-            .then(function(companyReward){
+            .then( (companyReward) => {
                 res.json(companyReward);
             })
             .catch(app.ErrorHelpers.notFound(res))

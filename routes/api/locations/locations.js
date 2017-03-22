@@ -1,8 +1,8 @@
-module.exports = function (app) {
-    var LocationsRoute = function(req, res){
+module.exports = (app) => {
+    const LocationsRoute = (req, res) => {
 
         app.LocationModel.getByCompany(req.params.companyId)
-            .then(function(locations){
+            .then( (locations) => {
                 res.json(locations);
             })
             .catch(app.ErrorHelpers.notFound(res))

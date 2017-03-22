@@ -1,7 +1,7 @@
-var helpers = {};
+const helpers = {};
 
-helpers.notFound = function(res) {
-    return function(err){
+helpers.notFound = (res) => {
+    return (err) => {
         console.log(err);
         res.status(404).json({ error: err.message ? err.message : err });
     };

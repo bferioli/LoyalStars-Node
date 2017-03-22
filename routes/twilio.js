@@ -1,22 +1,22 @@
-var twilio = require('twilio');
+const twilio = require('twilio');
 
-module.exports = function (app) {
-    var TwilioRoute = function (req, res) {
-        var data = {},
+module.exports = (app) => {
+    const TwilioRoute = (req, res) => {
+        const data = {},
             body = req.body.Body,
             phone = req.body.From.substring(2),
             phoneEncoded = app.PhoneHelpers.encodePhone(phone),
             twiml = new twilio.TwimlResponse();
 
         app.LocationModel.getByCheckinCode(body.toUpperCase())
-            .then(function(location){
+            .then( (location) => {
                 if (!location) {
                     throw new Error("Sorry, we can't seem to find the business you're looking for!");
                 }
                 data.location = location;
                 return app.RewardModel.getByPhone(phone);
             })
-            .then(function(reward){
+            .then( (reward) => {
                 if (reward) {
                     twiml.message(`You have a ${reward.companyReward.name} waiting at ${data.location.name}, to claim visit ${process.env.URL_PATH}/api/rewards/${reward.id}/${phoneEncoded}`);
                 } else {
@@ -26,7 +26,7 @@ module.exports = function (app) {
                 res.writeHead(200, {'Content-Type': 'text/xml'});
                 res.end(twiml.toString());
             })
-            .catch(function(error){
+            .catch( (error) => {
                 twiml.message(error.message);
                 res.writeHead(200, {'Content-Type': 'text/xml'});
                 res.end(twiml.toString());

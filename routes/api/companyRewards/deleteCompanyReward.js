@@ -1,8 +1,8 @@
-module.exports = function (app) {
-    var DeleteCompanyRewardRoute = function(req, res){
+module.exports = (app) => {
+    const DeleteCompanyRewardRoute = (req, res) => {
 
         app.CompanyRewardModel.deleteById(req.params.companyRewardId)
-            .then(function(){
+            .then( () => {
                 res.json({ deleted: true });
             })
             .catch(app.ErrorHelpers.notFound(res))
