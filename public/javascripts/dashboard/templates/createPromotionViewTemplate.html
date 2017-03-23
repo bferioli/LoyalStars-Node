@@ -1,0 +1,53 @@
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <h4 class="modal-title"><% if (model.id) { %>Edit<% } else { %>Create a<% } %> promotion</h4>
+    </div>
+    <div class="modal-body">
+      <table id="admin-table">
+        <tbody id="admin-table-body">
+          <tr>
+            <td>
+              <strong>Description</strong>
+              <span class="small-label">(e.g. &lsquo;Enter to win a $50 gift card&rsquo;)</span>
+              <div class="admin-field" data-type="text">
+                <input class="form-control" type="text" name="checkin_heading" value="<%- model.checkin_heading %>" data-label="description" required>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>Secondary info</strong>
+              <span class="small-label">(<strong>optional</strong>, e.g. &lsquo;Drawing takes place 12/01.&rsquo;)</span>
+              <div class="admin-field" data-type="text">
+                <input class="form-control" type="text" name="checkin_body" value="<%- model.checkin_body %>">
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>Check-in confirmation</strong>
+              <span class="small-label">(e.g. &lsquo;Thanks for entering!&rsquo;)</span>
+              <div class="admin-field" data-type="text">
+                <input class="form-control" type="text" name="confirm_heading" value="<%- model.confirm_heading %>" data-label="checkin confirmation" required>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>Secondary confirmation text</strong>
+              <span class="small-label">(<strong>optional</strong>, e.g. &lsquo;You'll be notified via text message if you're selected.&rsquo;)</span>
+              <div class="admin-field" data-type="text">
+                <input class="form-control" type="text" name="confirm_body" value="<%- model.confirm_body %>">
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <button class="admin-submit btn btn-warning">Save</button>
+    </div>
+  </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->

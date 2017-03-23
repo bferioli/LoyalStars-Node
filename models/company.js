@@ -21,6 +21,11 @@ module.exports = function(mongoose) {
         return query.exec();
     };
 
+    CompanyModel.getBySlug = function(slug) {
+        const query = this.findOne({ slug });
+        return query.exec();
+    };
+
     CompanyModel.updateById = function(id, model) {
         return this.findOneAndUpdate({_id: id}, model, {new: true});
     };

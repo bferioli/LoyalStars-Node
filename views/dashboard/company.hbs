@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>LOYL Admin</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/stylesheets/dashboard.css">
+</head>
+
+<body class="loyalty-dashboard" id="company" role="document">
+
+<nav class="navbar navbar-default navbar-static-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/dashboard"><img src="/static/img/quire-logo.png" class="nav-logo"></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="/dashboard">My Companies</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Account <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/signout">Sign out</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+<div class="container theme-showcase" id="main" role="main" data-company-id="{{ company.id }}" data-stripe-pk="{{! config.STRIPE_PUBLIC_KEY }}">
+    <div class="page-header">
+        {% if subscription %}
+        <span class="pull-right">
+            <strong>Subscription:</strong>
+            {{! subscription.name }}
+        </span>
+        {% else %}
+        <span class="pull-right">
+          <strong><a href="#" class="subscribe">Subscribe now</a> to enable your rewards and promotions.</strong>
+        </span>
+        {% endif %}
+        <h1>{{ company.name }}</h1>
+    </div>
+
+    <div class="row main-list-container">
+
+        <!-- Locations -->
+        <div class="list-table panel panel-default">
+            <div class="panel-heading">Locations</div>
+            <table class="table" id="locations-list">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Check-in code</th>
+                    <th>Address</th>
+                    <th># of checkins</th>
+                    <th>Current offer</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each locations}}
+                <tr>
+                    <td><a href="#" class="edit-location" data-location-id="{{ this.id }}"><strong>{{ this.name }}</strong></a></td>
+                    <td><strong>{{ this.checkinCode }}</strong></td>
+                    <td>{{ this.address }}</td>
+                    <td>{{! this.checkins }}</td>
+                    {% if this.current_promotion %}
+                    <td>
+                        <strong>Promotion:</strong>
+                        {{! this.current_promotion.checkin_heading }}
+                    </td>
+                    {% elif this.current_reward %}
+                    <td>
+                        <strong>Reward:</strong>
+                        {{ this.reward.name }}
+                    </td>
+                    {% else %}
+                    <td><strong>No current offer</strong></td>
+                    {% endif %}
+                </tr>
+                {{/each}}
+                </tbody>
+            </table>
+            <button class="create-location btn btn-default">Add a location</button>
+        </div>
+
+        <!-- Promotions -->
+        <div class="list-table panel panel-default">
+            <div class="panel-heading">Promotions</div>
+            <table class="table" id="promotions-list">
+                <thead>
+                <tr>
+                    <th>Description</th>
+                    <th># of check-ins</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{!#each promotions}}
+                <!--<tr data-id="{{! company.id }}">-->
+                    <!--<td><a href="#" class="edit-promotion" data-promotion-id="{{! this.id }}"><strong>{{! this.checkin_heading }}</strong></a></td>-->
+                    <!--<td>{{! this.checkin_count }}</td>-->
+                <!--</tr>-->
+                {{!/each}}
+                </tbody>
+            </table>
+            <button class="create-promotion btn btn-default">Create a promotion</button>
+        </div>
+
+        <!-- Rewards -->
+        <div class="list-table panel panel-default">
+            <div class="panel-heading">Rewards</div>
+            <table class="table" id="rewards-list">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Checkins required to earn</th>
+                    <th># of checkins</th>
+                    <th># earned</th>
+                    <th># redeemed</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each rewards}}
+                <tr data-id="{{ company.id }}">
+                    <td><a href="#" class="edit-reward" data-reward-id="{{ this.id }}"><strong>{{ this.name }}</strong></a></td>
+                    <td>{{ this.checkinsRequired }}</td>
+                    <td>{{ this.checkins }}</td>
+                    <td>{{ this.earned }}</td>
+                    <td>{{ this.redeemed }}</td>
+                </tr>
+                {{/each}}
+                </tbody>
+            </table>
+            <button class="create-reward btn btn-default">Create a reward</button>
+        </div>
+
+    </div>
+</div>
+
+
+<script type="text/template" id="errorViewTemplate">
+    <div class="error">
+        <h1><i class="glyphicon glyphicon-exclamation-sign"></i> <%= error %></h1>
+    </div>
+</script>
+
+<script type="text/template" id="loadingViewTemplate">
+    <div class="loading">
+        <div class="spinner">
+            <div class="cube1"></div>
+            <div class="cube2"></div>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="companyRewardsListTemplate">
+    {{#each rewards}}
+    <option value="{{ this.id }}">{{ this.name }}</option>
+    {{/each}}
+</script>
+
+<script type="text/template" id="companyPromotionsListTemplate">
+    {{!#each promotions}}
+    <!--<option value="{{! this.id }}">{{! this.checkin_heading }}</option>-->
+    {{!/each}}
+</script>
+
+<script data-main="/javascripts/dashboard/main" src="/javascripts/dashboard/libs/require.js"></script>
+</body>
+
+</html>

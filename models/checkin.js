@@ -29,6 +29,11 @@ module.exports = function(mongoose) {
         return query.exec();
     };
 
+    CheckinModel.getByReward = function(rewardId) {
+        const query = this.find({'reward': rewardId});
+        return query.exec();
+    };
+
     CheckinModel.getByPhoneAtCompany = function(company, phone) {
         const query = this.find({'phone': phone, 'company': company._id});
         return query.exec();

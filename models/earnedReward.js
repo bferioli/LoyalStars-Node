@@ -28,6 +28,11 @@ module.exports = function(mongoose) {
         return query.exec();
     };
 
+    EarnedRewardModel.getByReward = function(rewardId) {
+        const query = this.find({reward: rewardId});
+        return query.exec();
+    };
+
     EarnedRewardModel.getByPhone = function(phone) {
         const query = this.findOne({phone: phone, redeemed: null})
             .populate('company')
