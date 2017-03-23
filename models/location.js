@@ -21,6 +21,11 @@ module.exports = function(mongoose) {
 
     const LocationModel = mongoose.model('Location', LocationSchema);
 
+    LocationModel.getAll = function() {
+        const query = this.find();
+        return query.exec();
+    };
+
     LocationModel.getByCompany = function(companyId) {
         const query = this.find({company: companyId})
             .populate('reward');
