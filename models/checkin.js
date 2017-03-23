@@ -9,7 +9,7 @@ module.exports = function(mongoose) {
         longitude: Number,
         accuracy: Number,
         promotion: { type: mongoose.Schema.Types.ObjectId, ref: 'Promotion' },
-        reward: { type: mongoose.Schema.Types.ObjectId, ref: 'CompanyReward' }
+        reward: { type: mongoose.Schema.Types.ObjectId, ref: 'Reward' }
     }, { collection: 'Checkin' });
 
     const CheckinModel = mongoose.model('Checkin', CheckinSchema);
