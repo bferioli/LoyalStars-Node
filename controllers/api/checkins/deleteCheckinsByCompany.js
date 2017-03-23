@@ -1,7 +1,7 @@
 const ErrorHelpers = require('../../../helpers/error.js');
 
 module.exports = (app) => {
-    const DeleteCheckinsByCompanyRoute = (req, res) => {
+    const DeleteCheckinsByCompanyController = (req, res) => {
 
         app.CheckinModel.deleteByCompany(req.params.companyId)
             .then( () => {
@@ -10,5 +10,5 @@ module.exports = (app) => {
             .catch(ErrorHelpers.notFound(res));
     };
 
-    return DeleteCheckinsByCompanyRoute;
+    return DeleteCheckinsByCompanyController;
 };

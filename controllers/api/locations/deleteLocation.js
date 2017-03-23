@@ -1,7 +1,7 @@
 const ErrorHelpers = require('../../../helpers/error.js');
 
 module.exports = (app) => {
-    const DeleteLocationRoute = (req, res) => {
+    const DeleteLocationController = (req, res) => {
 
         app.LocationModel.deleteById(req.params.locationId)
             .then( () => {
@@ -10,5 +10,5 @@ module.exports = (app) => {
             .catch(ErrorHelpers.notFound(res));
     };
 
-    return DeleteLocationRoute;
+    return DeleteLocationController;
 };

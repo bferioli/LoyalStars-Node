@@ -1,7 +1,7 @@
 const ErrorHelpers = require('../../../helpers/error.js');
 
 module.exports = (app) => {
-    const CreateCompanyRoute = (req, res) => {
+    const CreateCompanyController = (req, res) => {
 
         const model = new app.CompanyModel(req.body);
 
@@ -12,5 +12,5 @@ module.exports = (app) => {
             .catch(ErrorHelpers.notFound(res));
     };
 
-    return CreateCompanyRoute;
+    return CreateCompanyController;
 };

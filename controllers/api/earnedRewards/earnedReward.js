@@ -1,7 +1,7 @@
 const ErrorHelpers = require('../../../helpers/error.js');
 
 module.exports = (app) => {
-    const EarnedRewardRoute = (req, res) => {
+    const EarnedRewardController = (req, res) => {
         app.RewardModel.getById(req.params.earnedRewardId)
             .then( (earnedReward) => {
                 res.json(earnedReward);
@@ -9,5 +9,5 @@ module.exports = (app) => {
             .catch(ErrorHelpers.notFound(res));
     };
 
-    return EarnedRewardRoute;
+    return EarnedRewardController;
 };

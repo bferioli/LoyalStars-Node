@@ -1,7 +1,7 @@
 const ErrorHelpers = require('../../../helpers/error.js');
 
 module.exports = (app) => {
-    var CheckinsByCompanyRoute = (req, res) => {
+    var CheckinsByCompanyController = (req, res) => {
 
         app.CheckinModel.getByCompany(req.params.companyId)
             .then( (checkins) => {
@@ -10,5 +10,5 @@ module.exports = (app) => {
             .catch(ErrorHelpers.notFound(res));
     };
 
-    return CheckinsByCompanyRoute;
+    return CheckinsByCompanyController;
 };

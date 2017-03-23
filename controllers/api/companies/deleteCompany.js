@@ -1,7 +1,7 @@
 const ErrorHelpers = require('../../../helpers/error.js');
 
 module.exports = (app) => {
-    const DeleteCompanyRoute = (req, res) => {
+    const DeleteCompanyController = (req, res) => {
 
         app.CompanyModel.deleteById(req.params.companyId)
             .then( () => {
@@ -22,5 +22,5 @@ module.exports = (app) => {
             .catch(ErrorHelpers.notFound(res));
     };
 
-    return DeleteCompanyRoute;
+    return DeleteCompanyController;
 };

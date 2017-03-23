@@ -1,7 +1,7 @@
 const ErrorHelpers = require('../../../helpers/error.js');
 
 module.exports = (app) => {
-    var CheckinsByLocationRoute = (req, res) => {
+    var CheckinsByLocationController = (req, res) => {
         app.CheckinModel.getByLocation(req.params.locationId)
             .then( (checkins) => {
                 res.json(checkins);
@@ -9,5 +9,5 @@ module.exports = (app) => {
             .catch(ErrorHelpers.notFound(res));
     };
 
-    return CheckinsByLocationRoute;
+    return CheckinsByLocationController;
 };

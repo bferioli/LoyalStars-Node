@@ -1,7 +1,7 @@
 const ErrorHelpers = require('../../../helpers/error.js');
 
 module.exports = (app) => {
-    const LocationsRoute = (req, res) => {
+    const LocationsController = (req, res) => {
 
         app.LocationModel.getByCompany(req.params.companyId)
             .then( (locations) => {
@@ -10,5 +10,5 @@ module.exports = (app) => {
             .catch(ErrorHelpers.notFound(res));
     };
 
-    return LocationsRoute;
+    return LocationsController;
 };

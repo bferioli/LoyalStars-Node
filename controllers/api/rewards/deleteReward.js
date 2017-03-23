@@ -1,7 +1,7 @@
 const ErrorHelpers = require('../../../helpers/error.js');
 
 module.exports = (app) => {
-    const DeleteRewardRoute = (req, res) => {
+    const DeleteRewardController = (req, res) => {
 
         app.RewardModel.deleteById(req.params.rewardId)
             .then( () => {
@@ -10,5 +10,5 @@ module.exports = (app) => {
             .catch(ErrorHelpers.notFound(res));
     };
 
-    return DeleteRewardRoute;
+    return DeleteRewardController;
 };

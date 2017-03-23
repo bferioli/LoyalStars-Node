@@ -2,7 +2,7 @@ const twilio = require('twilio');
 const PhoneHelpers = require('../helpers/phone.js');
 
 module.exports = (app) => {
-    const TwilioRoute = (req, res) => {
+    const TwilioController = (req, res) => {
         const data = {},
             body = req.body.Body,
             phone = req.body.From.substring(2),
@@ -34,5 +34,5 @@ module.exports = (app) => {
             });
     };
 
-    return TwilioRoute;
+    return TwilioController;
 };

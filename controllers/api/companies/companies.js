@@ -1,7 +1,7 @@
 const ErrorHelpers = require('../../../helpers/error.js');
 
 module.exports = (app) => {
-    const CompaniesRoute = (req, res) => {
+    const CompaniesController = (req, res) => {
 
         app.CompanyModel.getAll()
             .then( (companies) => {
@@ -10,5 +10,5 @@ module.exports = (app) => {
             .catch(ErrorHelpers.notFound(res));
     };
 
-    return CompaniesRoute;
+    return CompaniesController;
 };

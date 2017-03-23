@@ -2,7 +2,7 @@ const ErrorHelpers = require('../../../helpers/error.js');
 
 module.exports = (app) => {
 
-    const EarnedRewardsByLocationRoute = (req, res) => {
+    const EarnedRewardsByLocationController = (req, res) => {
 
         app.EarnedRewardModel.getByLocation(req.params.locationId)
             .then( (earnedRewards) => {
@@ -11,5 +11,5 @@ module.exports = (app) => {
             .catch(ErrorHelpers.notFound(res));
     };
 
-    return EarnedRewardsByLocationRoute;
+    return EarnedRewardsByLocationController;
 };

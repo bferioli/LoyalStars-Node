@@ -5,7 +5,7 @@ const TemplateHelpers = require('../../../helpers/template.js');
 const TimeHelpers = require('../../../helpers/time.js');
 
 module.exports = (app) => {
-    const ConfirmRoute = (req, res) => {
+    const ConfirmController = (req, res) => {
         const data = {};
         const phone = req.params.phone ? PhoneHelpers.decodePhone(req.params.phone) : '';
 
@@ -79,5 +79,5 @@ module.exports = (app) => {
             .catch(ErrorHelpers.notFound(res));
     };
 
-    return ConfirmRoute;
+    return ConfirmController;
 };

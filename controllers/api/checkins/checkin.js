@@ -3,7 +3,7 @@ const PhoneHelpers = require('../../../helpers/phone.js');
 const TemplateHelpers = require('../../../helpers/template.js');
 
 module.exports = (app) => {
-    const CheckinRoute = (req, res) => {
+    const CheckinController = (req, res) => {
         const data = {},
             phone = req.params.phone ? PhoneHelpers.decodePhone(req.params.phone) : '';
 
@@ -30,5 +30,5 @@ module.exports = (app) => {
             .catch(ErrorHelpers.notFound(res));
     };
 
-    return CheckinRoute;
+    return CheckinController;
 };
