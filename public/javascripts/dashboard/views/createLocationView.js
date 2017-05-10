@@ -18,7 +18,6 @@ define([
       'click .geo-by-address': 'geoByAddress',
       'click .geo-by-current': 'geoByCurrent',
       'change .geo-toggle': 'toggleGeoFields',
-      'change .time-toggle': 'toggleTimeFields',
       'change .offer-toggle': 'toggleOfferFields',
       'change .promotion-select': 'clearReward',
       'change .reward-select': 'clearPromotion'
@@ -171,21 +170,6 @@ define([
         this.model.set('longitude', 0);
       }
     },
-    toggleTimeFields: function() {
-      var $fields = this.$el.find('.time-toggle'),
-          $timeRows = this.$el.find('.time-row'),
-          selected = $fields.filter(':checked').val(),
-          enabled = ( selected === 'y' );
-
-      if (enabled) {
-        $timeRows.removeClass('hidden');
-        this.model.set('schedule_enabled', true);
-      }
-      else {
-        $timeRows.addClass('hidden');
-        this.model.set('schedule_enabled', false);
-      }
-    },
     toggleOfferFields: function() {
       var $fields = this.$el.find('.offer-toggle'),
           $promoRow = this.$el.find('.promo-row'),
@@ -255,89 +239,6 @@ define([
 
       this.toggleGeoFields();
     },
-    initializeTimeFields: function() {
-      this.$openDays = this.$el.find('.open-days-field input[type="checkbox"]');
-      this.$openTime = this.$el.find('input[name="open_time"]');
-      this.$openAmpm = this.$el.find('select[name="open_ampm"]');
-      this.$closeTime = this.$el.find('input[name="close_time"]');
-      this.$closeAmpm = this.$el.find('select[name="close_ampm"]');
-
-      var openDays = this.model.get('open_days'),
-          openHour = this.model.get('open_hour'),
-          openMin = this.model.get('open_minute') || 0,
-          openDurHour = this.model.get('open_duration_hours'),
-          openDurMin = this.model.get('open_duration_minutes') || 0,
-          scheduleEnabled = this.model.get('schedule_enabled'),
-          maskOptions = {
-            placeholder: "00:00", 
-            insertMode: false, 
-            showMaskOnHover: false,
-            hourFormat: 12
-          };
-
-      if ( scheduleEnabled ) {
-        this.$el.find('.time-toggle[value="y"]').prop('checked', true);
-        this.toggleTimeFields();
-      }
-      else if ( scheduleEnabled === false ) {
-        this.$el.find('.time-toggle[value="n"]').prop('checked', true);
-      }
-
-      if ( openDays ) {
-        var days = openDays.split(',');
-        for (var i = 0; i < days.length; i++) {
-          var day = days[i];
-          this.$openDays.filter('[value="' + day + '"]').prop('checked', true);
-        }
-      }
-
-      if ( openHour !== null ) {
-        var oHour = openHour,
-            oPm = ( oHour >= 12  && oHour < 24 ),
-            oTime;
-
-        if (oHour > 12) oHour = oHour - 12;
-
-        oTime = oHour + ':';
-        oTime += (openMin < 10) ? '0' + openMin : openMin;
-
-        this.$openTime.val(oTime);
-        if (oPm) this.$openAmpm.val('pm');
-      }
-
-      if ( openDurHour !== null ) {
-        var cHour = openHour + openDurHour,
-            cMin = openMin + openDurMin,
-            cTime;
-
-        // Open past midnight
-        if (cHour > 24) cHour = cHour - 24;
-
-        cPm = ( cHour >= 12 && cHour < 24 );
-
-        if (cHour > 12) cHour = cHour - 12;
-
-        if (cMin >= 60) {
-          cHour++;
-          cMin = cMin - 60;
-        }
-
-        cTime = cHour + ':';
-        cTime += (cMin < 10) ? '0' + cMin : cMin;
-
-        this.$closeTime.val(cTime);
-        if (cPm) this.$closeAmpm.val('pm');
-      }
-
-      this.$openTime.inputmask("hh:mm", maskOptions);
-      this.$closeTime.inputmask("hh:mm", maskOptions);
-
-      this.$openDays.on('change', $.proxy(this.updateOpenDays, this));
-      this.$openTime.on('change', $.proxy(this.updateOpenTime, this));
-      this.$openAmpm.on('change', $.proxy(this.updateOpenTime, this));
-      this.$closeTime.on('change', $.proxy(this.updateCloseTime, this));
-      this.$closeAmpm.on('change', $.proxy(this.updateCloseTime, this));
-    },
     initializeOfferFields: function() {
       if ( this.model.get('promotion_id') ) {
         this.$el.find('.offer-toggle[value="promo"]').prop('checked', true);
@@ -347,57 +248,6 @@ define([
         this.$el.find('.offer-toggle[value="reward"]').prop('checked', true);
         this.toggleOfferFields();
       }
-    },
-    updateOpenDays: function() {
-      var days = [];
-      this.$openDays.filter(':checked').each(function(i, day){
-        days.push(day.value);
-      });
-      this.model.set('open_days', days.join());
-    },
-    updateOpenTime: function() {
-      var ampm = this.$openAmpm.val(),
-          time = this.$openTime.val().split(':'),
-          hour = parseInt( time[0] ),
-          min = time[1] ? parseInt( time[1] ) : 0;
-
-      if (ampm === "pm" && hour < 12) hour = hour + 12;
-      if (ampm === "am" && hour === 12) hour = hour - 12;
-
-      this.model.set('open_hour', hour);
-      this.model.set('open_minute', min);
-      this.updateCloseTime();
-    },
-    updateCloseTime: function() {
-      var ampm = this.$closeAmpm.val(),
-          time = this.$closeTime.val().split(':'),
-          hour = parseInt( time[0] ),
-          min = time[1] ? parseInt( time[1] ) : 0,
-          openHour = this.model.get('open_hour'),
-          openMin = this.model.get('open_minute'),
-          openDurHour,
-          openDurMin;
-
-      if (ampm === "pm" && hour < 12) hour = hour + 12;
-      if (ampm === "am" && hour === 12) hour = hour - 12;
-
-      // Open past midnight
-      if (hour < openHour) openDurHour = hour - openHour + 24;
-      else openDurHour = hour - openHour;
-
-      if (min === openMin) {
-        openDurMin = 0;
-      }
-      else if (min < openMin) {
-        openDurHour--;
-        openDurMin = openMin - min;
-      }
-      else {
-        openDurMin = min - openMin;
-      }
-      
-      this.model.set('open_duration_hours', openDurHour);
-      this.model.set('open_duration_minutes', openDurMin);
     },
     prevSection: function() {
       var $sections = this.$el.find('tbody'),
@@ -449,7 +299,6 @@ define([
 
       this.initializeLocationFields();
       this.initializeGeoFields();
-      this.initializeTimeFields();
       this.initializeOfferFields();
 
       var promotionsListTemplate = $('#companyPromotionsListTemplate'),

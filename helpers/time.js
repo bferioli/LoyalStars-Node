@@ -1,3 +1,9 @@
+/*
+    Time Helpers - created for deprecated open hours functionality
+    Can be implemented if new time functionality is added
+    This stuff is a pain in the ass
+ */
+
 const helpers = {};
 const moment = require('moment');
 const time = require('time');
