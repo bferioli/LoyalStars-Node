@@ -15,7 +15,6 @@ module.exports = function(mongoose) {
         scheduleEnabled: Boolean,
         checkinMessage: String,
         rewardMessage: String,
-        promotion: { type: mongoose.Schema.Types.ObjectId, ref: 'Promotion' },
         reward: { type: mongoose.Schema.Types.ObjectId, ref: 'Reward' }
     }, { collection: 'Location' });
 
@@ -35,7 +34,6 @@ module.exports = function(mongoose) {
     LocationModel.getByCheckinCode = function(checkinCode) {
         const query = this.findOne({checkinCode: checkinCode})
             .populate('company')
-            .populate('promotion')
             .populate('reward');
         return query.exec();
     };

@@ -30,7 +30,6 @@ app.CheckinModel = require('./models/checkin.js')(mongoose);
 app.CompanyModel = require('./models/company.js')(mongoose);
 app.EarnedRewardModel = require('./models/earnedReward.js')(mongoose);
 app.LocationModel = require('./models/location.js')(mongoose);
-app.PromotionModel = require('./models/promotion.js')(mongoose);
 app.RewardModel = require('./models/reward.js')(mongoose);
 app.SubscriptionModel = require('./models/subscription.js')(mongoose);
 app.UserModel = require('./models/user.js')(mongoose);

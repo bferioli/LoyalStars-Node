@@ -8,7 +8,6 @@ module.exports = function(mongoose) {
         latitude: Number,
         longitude: Number,
         accuracy: Number,
-        promotion: { type: mongoose.Schema.Types.ObjectId, ref: 'Promotion' },
         reward: { type: mongoose.Schema.Types.ObjectId, ref: 'Reward' }
     }, { collection: 'Checkin' });
 
