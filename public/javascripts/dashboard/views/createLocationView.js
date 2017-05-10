@@ -184,11 +184,11 @@ define([
         $checkinCode.val(checkinCodeMasked);
         $checkinCode.trigger('change');
         $.ajax({
-          url: '/api/2/checkin_code/' + checkinCodeMasked,
+          url: '/api/locations/checkin-code/' + checkinCodeMasked,
           method: 'GET'
         }).done(function(data){
           $checkinCodeParent.find('.error').remove();
-          self.checkinCodeTaken = ( !data.result || ( data.result.available === false && data.result.id !== self.model.get('id') ) );
+          self.checkinCodeTaken = ( !data || !data.available );
           if (self.checkinCodeTaken)
             $checkinCodeParent.append('<span class="error">This checkin code is already taken.</span>');
         });

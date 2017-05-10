@@ -24,7 +24,7 @@ define([
           model;
 
       if (options.id === 'new') {
-        properties = options.cid ? { company_id: options.cid } : {};
+        properties = options.cid ? { companyId: options.cid } : {};
         model = new options.model(properties);
         model.urlRoot = options.urlRoot;
       }
@@ -38,7 +38,7 @@ define([
       this.$el.append(this.childView.$el);
 
 
-      model.on('sync', function(){ console.log(model); window.locationModel = model; });
+      model.on('sync', function(){ window.locationModel = model; });
       model.on('error', this.showError);
       model.on('sync', $.proxy(this.childView.render, this.childView));
     },
@@ -105,7 +105,7 @@ define([
     launchSubscription: function(e) {
       if (e && typeof e.preventDefault !== 'undefined')
         e.preventDefault();
-      this.childView = new SubscribeView({ company_id: this.companyId, stripe_pk: this.stripePk });
+      this.childView = new SubscribeView({ companyId: this.companyId, stripeKey: this.stripeKey });
       this.$el.append(this.childView.$el);
     },
     subscribeOrRefresh: function() {
@@ -153,7 +153,7 @@ define([
       var self = this;
 
       var companyCallback = function(options) {
-        self.companyId = options.model.get('id');
+        self.companyId = options.model.id;
         self.createLocation();
       };
 
@@ -165,7 +165,7 @@ define([
     },
     initialize: function() {
       this.companyId = this.$el.data('company-id');
-      this.stripePk = this.$el.data('stripe-pk');
+      this.stripeKey = this.$el.data('stripe-pk');
     }
   });
 

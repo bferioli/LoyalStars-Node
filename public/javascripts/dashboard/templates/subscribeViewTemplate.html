@@ -40,7 +40,7 @@
                   <form action="/subscribe/<%- companyId %>/loyalty_early_annual" method="POST">
                     <script
                       src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                      data-key="<%- stripe_pk %>"
+                      data-key="<%- stripeKey %>"
                       data-name="Quire Loyalty - Annual"
                       data-description="$350 a year, 30-day free trial"
                       data-panel-label="Subscribe"
@@ -86,7 +86,7 @@
                   <form action="/subscribe/<%- companyId %>/loyalty_basic_monthly" method="POST">
                     <script
                       src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                      data-key="<%- stripe_pk %>"
+                      data-key="<%- stripeKey %>"
                       data-name="Quire Loyalty - Monthly"
                       data-description="$35 a month"
                       data-panel-label="Subscribe"

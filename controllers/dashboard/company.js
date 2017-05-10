@@ -37,7 +37,7 @@ module.exports = (app) => {
                 return Promise.all(promises);
             })
             .then( () => {
-                res.render('dashboard/company', { company: data.company, locations: data.locations, rewards: data.rewards });
+                res.render('dashboard/company', { company: data.company, locations: data.locations, rewards: data.rewards, stripeKey: '' });
             })
             .catch(ErrorHelpers.notFound(res));
     };

@@ -41,7 +41,7 @@
     </div><!-- /.container-fluid -->
 </nav>
 
-<div class="container theme-showcase" id="main" role="main" data-company-id="{{ company.id }}" data-stripe-pk="{{! config.STRIPE_PUBLIC_KEY }}">
+<div class="container theme-showcase" id="main" role="main" data-company-id="{{ company.id }}" data-stripe-pk="{{ stripeKey }}">
     <div class="page-header">
         {% if subscription %}
         <span class="pull-right">
