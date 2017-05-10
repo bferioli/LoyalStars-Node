@@ -2,6 +2,7 @@ const ErrorHelpers = require('../../../helpers/error.js');
 const GeoHelpers = require('../../../helpers/geolocation.js');
 const PhoneHelpers = require('../../../helpers/phone.js');
 const TemplateHelpers = require('../../../helpers/template.js');
+const TimeHelpers = require('../../../helpers/time.js');
 
 module.exports = (app) => {
     const ConfirmController = (req, res) => {
@@ -20,7 +21,10 @@ module.exports = (app) => {
                 return app.CheckinModel.getByPhoneAtCompany(location.company, phone);
             })
             .then( (checkins) => {
-                return GeoHelpers.geoFence({ request: req.body, location: data.location, user: data.user });
+                return Promise.all([
+                    GeoHelpers.geoFence({ request: req.body, location: data.location, user: data.user }),
+                    TimeHelpers.timeFence({ checkins, location: data.location, user: data.user })
+                ]);
             })
             .then( () => {
                 const checkin = new app.CheckinModel({
