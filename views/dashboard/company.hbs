@@ -21,7 +21,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/dashboard"><img src="/static/img/quire-logo.png" class="nav-logo"></a>
+            <!--<a class="navbar-brand" href="/dashboard"><img src="/static/img/quire-logo.png" class="nav-logo"></a>-->
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -78,46 +78,19 @@
                     <td><strong>{{ this.checkinCode }}</strong></td>
                     <td>{{ this.address }}</td>
                     <td>{{! this.checkins }}</td>
-                    {% if this.current_promotion %}
-                    <td>
-                        <strong>Promotion:</strong>
-                        {{! this.current_promotion.checkin_heading }}
-                    </td>
-                    {% elif this.current_reward %}
+                    {{#if this.reward}}
                     <td>
                         <strong>Reward:</strong>
                         {{ this.reward.name }}
                     </td>
-                    {% else %}
-                    <td><strong>No current offer</strong></td>
-                    {% endif %}
+                    {{else}}
+                    <td><strong>No reward set</strong></td>
+                    {{/if}}
                 </tr>
                 {{/each}}
                 </tbody>
             </table>
             <button class="create-location btn btn-default">Add a location</button>
-        </div>
-
-        <!-- Promotions -->
-        <div class="list-table panel panel-default">
-            <div class="panel-heading">Promotions</div>
-            <table class="table" id="promotions-list">
-                <thead>
-                <tr>
-                    <th>Description</th>
-                    <th># of check-ins</th>
-                </tr>
-                </thead>
-                <tbody>
-                {{!#each promotions}}
-                <!--<tr data-id="{{! company.id }}">-->
-                    <!--<td><a href="#" class="edit-promotion" data-promotion-id="{{! this.id }}"><strong>{{! this.checkin_heading }}</strong></a></td>-->
-                    <!--<td>{{! this.checkin_count }}</td>-->
-                <!--</tr>-->
-                {{!/each}}
-                </tbody>
-            </table>
-            <button class="create-promotion btn btn-default">Create a promotion</button>
         </div>
 
         <!-- Rewards -->
@@ -171,12 +144,6 @@
     {{#each rewards}}
     <option value="{{ this.id }}">{{ this.name }}</option>
     {{/each}}
-</script>
-
-<script type="text/template" id="companyPromotionsListTemplate">
-    {{!#each promotions}}
-    <!--<option value="{{! this.id }}">{{! this.checkin_heading }}</option>-->
-    {{!/each}}
 </script>
 
 <script data-main="/javascripts/dashboard/main" src="/javascripts/dashboard/libs/require.js"></script>

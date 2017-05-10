@@ -4,21 +4,18 @@ define([
   'models/genericModel',
   'views/createCompanyView',
   'views/createLocationView',
-  'views/createPromotionView',
   'views/createRewardView',
   'views/subscribeView',
   'bootstrap'
-], function($, Backbone, GenericModel, CreateCompanyView, CreateLocationView, CreatePromotionView, CreateRewardView, SubscribeView){
+], function($, Backbone, GenericModel, CreateCompanyView, CreateLocationView, CreateRewardView, SubscribeView){
   var CompanyView = Backbone.View.extend({
     el: '#main',
     childView: null,
     events: {
       'click .create-company': 'onboardingFlow',
       'click .create-location': 'createLocation',
-      'click .create-promotion': 'createPromotion',
       'click .create-reward': 'createReward',
       'click .edit-location': 'editLocation',
-      'click .edit-promotion': 'editPromotion',
       'click .edit-reward': 'editReward',
       'click .subscribe': 'subscribeOrRefresh'
     },
@@ -57,7 +54,7 @@ define([
     },
     createLocation: function() {
       var options = {
-        urlRoot: '/api/locations',
+        urlRoot: '/api/companies/' + this.companyId + '/locations',
         id: 'new',
         model: GenericModel,
         view: CreateLocationView,
@@ -67,21 +64,9 @@ define([
       this.triggerSubView(options);
       this.childView.on('saveSuccess', $.proxy(this.locationCallback, this));
     },
-    createPromotion: function() {
-      var options = {
-        urlRoot: '/api/promotions',
-        id: 'new',
-        model: GenericModel,
-        view: CreatePromotionView,
-        cid: this.companyId
-      };
-
-      this.triggerSubView(options);
-      this.childView.on('saveSuccess', $.proxy(this.promotionCallback, this));
-    },
     createReward: function() {
       var options = {
-        urlRoot: '/api/rewards',
+        urlRoot: '/api/companies/' + this.companyId + '/rewards',
         id: 'new',
         model: GenericModel,
         view: CreateRewardView,
@@ -103,19 +88,6 @@ define([
 
       this.triggerSubView(options);
       this.childView.on('saveSuccess', $.proxy(this.locationCallback, this));
-    },
-    editPromotion: function(e) {
-      e.preventDefault();
-      var id = $(e.currentTarget).data('promotion-id');
-      var options = {
-        urlRoot: '/api/promotions',
-        id: id,
-        model: GenericModel,
-        view: CreatePromotionView
-      };
-
-      this.triggerSubView(options);
-      this.childView.on('saveSuccess', $.proxy(this.promotionCallback, this));
     },
     editReward: function(e) {
       e.preventDefault();
@@ -158,13 +130,6 @@ define([
 
       var location = options.model;
 
-      var promotionCallback = function(options) {
-        var promotionId = options.model.get('id');
-        location.set('promotion_id', promotionId);
-        location.on('sync', $.proxy(self.subscribeOrRefresh, self));
-        location.save();
-      };
-
       var rewardCallback = function(options) {
         var rewardId = options.model.get('id');
         location.set('reward_id', rewardId);
@@ -172,19 +137,11 @@ define([
         location.save();
       };
 
-      if (options.nextStep === 'promo') {
-        this.createPromotion();
-        this.childView.off('saveSuccess');
-        this.childView.on('saveSuccess', promotionCallback);
-      }
-      else if (options.nextStep === 'reward') {
+      if (options.nextStep === 'reward') {
         this.createReward();
         this.childView.off('saveSuccess');
         this.childView.on('saveSuccess', rewardCallback);
       }
-    },
-    promotionCallback: function(options) {
-      this.subscribeOrRefresh();
     },
     rewardCallback: function(options) {
       this.subscribeOrRefresh();

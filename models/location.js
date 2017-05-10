@@ -41,7 +41,8 @@ module.exports = function(mongoose) {
     };
 
     LocationModel.getById = function(id) {
-        const query = this.findById(id);
+        const query = this.findById(id)
+            .populate('reward');
         return query.exec();
     };
 

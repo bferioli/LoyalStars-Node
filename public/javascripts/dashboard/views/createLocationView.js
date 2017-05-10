@@ -18,9 +18,6 @@ define([
       'click .geo-by-address': 'geoByAddress',
       'click .geo-by-current': 'geoByCurrent',
       'change .geo-toggle': 'toggleGeoFields',
-      'change .offer-toggle': 'toggleOfferFields',
-      'change .promotion-select': 'clearReward',
-      'change .reward-select': 'clearPromotion'
     },
     saveModel: function() {
       var self = this,
@@ -32,8 +29,7 @@ define([
       this.trigger('loading');
       this.model.save({}, {
         success: function(model, response, options) {
-          var location = options.xhr.getResponseHeader('Location'),
-              promoId;
+          var location = options.xhr.getResponseHeader('Location');
 
           if ( location && !model.get('id') ) {
             var id = location.substring( location.lastIndexOf('/') + 1 );
@@ -42,20 +38,11 @@ define([
 
           self.$el.modal('hide');
 
-          var offerType = self.$el.find('.offer-toggle:checked').val(),
-              opts = { model: model, response: response, options: options };
+          var opts = { model: model, response: response, options: options },
+              reward = self.$el.find('.reward-select').val();
 
-          if (offerType === 'promo') {
-            promoId = self.$el.find('.promotion-select').val();
-            if (!promoId.length) {
-              opts.nextStep = offerType;
-            }
-          }
-          else if (offerType === 'reward') {
-            promoId = self.$el.find('.reward-select').val();
-            if (!promoId.length) {
-              opts.nextStep = offerType;
-            }
+          if (!reward.length) {
+            opts.nextStep = 'reward';
           }
 
           self.trigger('saveSuccess', opts);
@@ -170,23 +157,6 @@ define([
         this.model.set('longitude', 0);
       }
     },
-    toggleOfferFields: function() {
-      var $fields = this.$el.find('.offer-toggle'),
-          $promoRow = this.$el.find('.promo-row'),
-          $rewardRow = this.$el.find('.reward-row'),
-          selected = $fields.filter(':checked').val();
-
-      if (selected === 'promo') {
-        $promoRow.removeClass('hidden');
-        $rewardRow.addClass('hidden');
-        this.clearReward();
-      }
-      else if (selected === 'reward') {
-        $rewardRow.removeClass('hidden');
-        $promoRow.addClass('hidden');
-        this.clearPromotion();
-      }
-    },
     initializeField: function(i, field) {
       var $field = $(field),
           type = $field.data('type');
@@ -239,16 +209,6 @@ define([
 
       this.toggleGeoFields();
     },
-    initializeOfferFields: function() {
-      if ( this.model.get('promotion_id') ) {
-        this.$el.find('.offer-toggle[value="promo"]').prop('checked', true);
-        this.toggleOfferFields();
-      }
-      else if ( this.model.get('reward_id') ) {
-        this.$el.find('.offer-toggle[value="reward"]').prop('checked', true);
-        this.toggleOfferFields();
-      }
-    },
     prevSection: function() {
       var $sections = this.$el.find('tbody'),
           $active = $sections.filter(':not(.hidden)'),
@@ -281,14 +241,6 @@ define([
         this.$el.find('.admin-submit').removeClass('hidden');
       }
     },
-    clearReward: function() {
-      this.$el.find('.reward-select').val('');
-      this.model.set('reward_id', null);
-    },
-    clearPromotion: function() {
-      this.$el.find('.promotion-select').val('');
-      this.model.set('promotion_id', null);
-    },
     render: function() {
       var html = this.template({ model: this.model.toJSON(), s3_base: this.model.s3_base });
       this.$el.empty();
@@ -299,19 +251,18 @@ define([
 
       this.initializeLocationFields();
       this.initializeGeoFields();
-      this.initializeOfferFields();
 
-      var promotionsListTemplate = $('#companyPromotionsListTemplate'),
-          rewardsListTemplate = $('#companyRewardsListTemplate');
-
-      if (promotionsListTemplate.length) {
-        var promotionsList = _.template(promotionsListTemplate.html())({ model: this.model.toJSON() });
-        this.$el.find('.promotion-select').append(promotionsList);
-      }
+      var rewardsListTemplate = $('#companyRewardsListTemplate');
 
       if (rewardsListTemplate.length) {
-        var rewardsList = _.template(rewardsListTemplate.html())({ model: this.model.toJSON() });
-        this.$el.find('.reward-select').append(rewardsList);
+        var rewardsList = _.template(rewardsListTemplate.html())({ model: this.model.toJSON() }),
+            $rewardSelect = this.$el.find('.reward-select'),
+            currentReward = this.model.get('reward');
+        $rewardSelect.append(rewardsList);
+
+        if (currentReward) {
+          $rewardSelect.find('option[value="' + currentReward._id + '"]').prop('selected', true);
+        }
       }
     },
     initialize: function(options) {
