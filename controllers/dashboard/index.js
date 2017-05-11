@@ -3,8 +3,8 @@ const ErrorHelpers = require('../../helpers/error.js');
 module.exports = (app, passport) => {
     const DashboardIndexController = (req, res) => {
 
-        if (!req.user)
-            Promise.reject(ErrorHelpers.notFound(res));
+        if (!req.isAuthenticated())
+            return res.redirect('/dashboard/login');
 
         app.CompanyModel.getAll(req.user)
             .then( (companies) => {

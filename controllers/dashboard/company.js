@@ -20,6 +20,10 @@ module.exports = (app, passport) => {
     };
 
     const DashboardCompanyController = (req, res) => {
+
+        if (!req.isAuthenticated())
+            return res.redirect('/dashboard/login');
+
         const data = {};
         app.CompanyModel.getBySlug(req.params.slug, req.user)
             .then( (company) => {
