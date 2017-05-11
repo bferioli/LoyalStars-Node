@@ -5,8 +5,7 @@ module.exports = function(mongoose) {
         url: String,
         logo: String,
         industry: String,
-        adminUser: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-        subscription: { type: mongoose.Schema.Types.ObjectId, ref: 'Subscription' }
+        adminUser: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
     }, { collection: 'Company' });
 
     const CompanyModel = mongoose.model('Company', CompanySchema);

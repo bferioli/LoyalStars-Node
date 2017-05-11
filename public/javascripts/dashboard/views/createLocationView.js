@@ -86,7 +86,7 @@ define([
       var geocoder = new google.maps.Geocoder(),
           address = this.$el.find('input[name="address"]').val(),
           city = this.$el.find('input[name="city"]').val(),
-          state = this.$el.find('input[name="state"]').val(),
+          state = this.$el.find('select[name="state"]').val(),
           zip = this.$el.find('input[name="zip"]').val(),
           address_full = address + ', ' + city + ' ' + state + ' ' + zip;
 
@@ -175,7 +175,7 @@ define([
     },
     initializeLocationFields: function() {
       var self = this,
-          $checkinCode = this.$el.find('input[name="checkin_code"]'),
+          $checkinCode = this.$el.find('input[name="checkinCode"]'),
           $checkinCodeParent = $checkinCode.parent(),
           $zip = this.$el.find('input[name="zip"]');
 

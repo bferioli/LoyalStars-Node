@@ -5,7 +5,7 @@ module.exports = (app) => {
 
         app.CompanyModel.getAll()
             .then( (companies) => {
-                res.render('dashboard/index', { companies });
+                res.render('dashboard/index', { companies, stripeKey: process.env.STRIPE_PUBLIC_KEY });
             })
             .catch(ErrorHelpers.notFound(res));
     };

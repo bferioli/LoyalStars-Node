@@ -5,104 +5,54 @@
       <h4 class="modal-title">Select your plan</h4>
     </div>
     <div class="modal-body">
-      <div class="row">
-
-        <div class="col-sm-6">
-          <table class="subscription-table featured btn-warning">
-            <thead>
-              <tr>
-                <th>
-                  <h3>Annual</h3>
-                  <strong>$350 a year, 30 day trial</strong>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  Offer rewards
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Get real-time data on check-ins and marketing success
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <p><strong>Full access to new premium features as they're released:</strong></p>
-                  <p class="small-label">Customize app with your logo and colors</p>
-                  <p class="small-label">Direct SMS marketing to your customers</p>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <form action="/subscribe/<%- companyId %>/loyalty_early_annual" method="POST">
-                    <script
-                      src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                      data-key="<%- stripeKey %>"
-                      data-name="Quire Loyalty - Annual"
-                      data-description="$350 a year, 30-day free trial"
-                      data-panel-label="Subscribe"
-                      data-label="Subscribe"
-                      data-amount="0"
-                      data-email="<%- user.email %>"
-                      data-allow-remember-me="false">
-                    </script>
-                  </form>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        
-        <div class="col-sm-6">
-          <table class="subscription-table">
-            <thead>
-              <tr>
-                <th>
-                  <h3>Monthly</h3>
-                  <strong>$35 a month</strong>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  Offer rewards and promotions
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Get real-time data on check-ins and marketing success
-                </td>
-              </tr>
-              <tr>
-                <td class="monthly-spacer">
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <form action="/subscribe/<%- companyId %>/loyalty_basic_monthly" method="POST">
-                    <script
-                      src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                      data-key="<%- stripeKey %>"
-                      data-name="Quire Loyalty - Monthly"
-                      data-description="$35 a month"
-                      data-panel-label="Subscribe"
-                      data-label="Subscribe"
-                      data-amount="0"
-                      data-email="<%- user.email %>"
-                      data-allow-remember-me="false">
-                    </script>
-                  </form>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-      </div>
+      <table class="subscription-table">
+        <thead>
+          <tr>
+            <th>
+              <h3>LOYL + Tablet</h3>
+              <strong>$50 a month</strong>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              Loyalty rewards program
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Automated SMS marketing
+            </td>
+          </tr>
+          <tr>
+            <td>
+              7-inch tablet with elegant security stand
+            </td>
+          </tr>
+          <tr>
+            <td class="monthly-spacer">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <form action="/api/subscriptions/<%- locationId %>/loyl-tablet" method="POST">
+                <script
+                  src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                  data-key="<%- stripeKey %>"
+                  data-name="LOYL + Tablet"
+                  data-description="$50 a month"
+                  data-panel-label="Subscribe"
+                  data-label="Subscribe"
+                  data-amount="0"
+                  data-email=""
+                  data-allow-remember-me="false">
+                </script>
+              </form>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div><!-- /.modal-content -->
 </div><!-- /.modal-dialog -->

@@ -8,7 +8,7 @@ require.config({
     'jquery': 'libs/jquery.min',
     'datetimepicker': 'libs/jquery.datetimepicker',
     'inputmask': 'libs/jquery.inputmask.min',
-    'geocoder': '//maps.google.com/maps/api/js#',
+    'geocoder': '//maps.google.com/maps/api/js?key=AIzaSyB2YpgTeYK2DJx8ff1KJrCHWE7Ki4GPl4E',
     'text': 'libs/text'
   },
   shim: {

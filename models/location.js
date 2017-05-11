@@ -15,7 +15,8 @@ module.exports = function(mongoose) {
         scheduleEnabled: Boolean,
         checkinMessage: String,
         rewardMessage: String,
-        reward: { type: mongoose.Schema.Types.ObjectId, ref: 'Reward' }
+        reward: { type: mongoose.Schema.Types.ObjectId, ref: 'Reward' },
+        subscription: { type: mongoose.Schema.Types.ObjectId, ref: 'Subscription' }
     }, { collection: 'Location' });
 
     const LocationModel = mongoose.model('Location', LocationSchema);

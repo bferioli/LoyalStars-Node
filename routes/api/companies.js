@@ -11,6 +11,7 @@ module.exports = (app) => {
 
     const CompanyLocationsController = require('../../controllers/api/locations/locations')(app);
     const CreateCompanyLocationController = require('../../controllers/api/locations/createLocation')(app);
+    const UpdateCompanyLocationController = require('../../controllers/api/locations/updateLocation')(app);
 
     const CompanyCheckinsController = require('../../controllers/api/checkins/checkinsByCompany')(app);
     const DeleteCompanyCheckinsController = require('../../controllers/api/checkins/deleteCheckinsByCompany')(app);
@@ -27,6 +28,8 @@ module.exports = (app) => {
 
     companies.get("/:companyId/locations", CompanyLocationsController);
     companies.post("/:companyId/locations", CreateCompanyLocationController);
+    companies.post("/:companyId/locations", CreateCompanyLocationController);
+    companies.put("/:companyId/locations/:locationId", UpdateCompanyLocationController);
 
     companies.get("/:companyId/checkins", CompanyCheckinsController);
     companies.delete("/:companyId/checkins", DeleteCompanyCheckinsController);

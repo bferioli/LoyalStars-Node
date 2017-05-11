@@ -38,7 +38,6 @@ define([
       this.$el.append(this.childView.$el);
 
 
-      model.on('sync', function(){ window.locationModel = model; });
       model.on('error', this.showError);
       model.on('sync', $.proxy(this.childView.render, this.childView));
     },
@@ -105,16 +104,16 @@ define([
     launchSubscription: function(e) {
       if (e && typeof e.preventDefault !== 'undefined')
         e.preventDefault();
-      this.childView = new SubscribeView({ companyId: this.companyId, stripeKey: this.stripeKey });
+      this.childView = new SubscribeView({ locationId: this.location.id, stripeKey: this.stripeKey });
       this.$el.append(this.childView.$el);
     },
     subscribeOrRefresh: function() {
       var self = this;
       $.ajax({
-        url: '/api/subscription/' + this.companyId,
+        url: '/api/subscriptions/' + self.location.id,
         method: 'GET'
       }).done(function(data){
-        if (data.result.subscription)
+        if (data.length)
           self.refreshPage();
         else
           self.launchSubscription();
@@ -123,18 +122,18 @@ define([
     locationCallback: function(options) {
       var self = this;
 
+      this.location = options.model;
+
       if (!options.nextStep){
         this.subscribeOrRefresh();
         return;
       }
 
-      var location = options.model;
-
       var rewardCallback = function(options) {
-        var rewardId = options.model.get('id');
-        location.set('reward_id', rewardId);
-        location.on('sync', $.proxy(self.subscribeOrRefresh, self));
-        location.save();
+        var rewardId = options.model.id;
+        self.location.set('reward', rewardId);
+        self.location.on('sync', $.proxy(self.subscribeOrRefresh, self));
+        self.location.save();
       };
 
       if (options.nextStep === 'reward') {
