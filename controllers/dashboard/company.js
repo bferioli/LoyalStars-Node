@@ -21,7 +21,7 @@ module.exports = (app, passport) => {
 
     const DashboardCompanyController = (req, res) => {
         const data = {};
-        app.CompanyModel.getBySlug(req.params.slug)
+        app.CompanyModel.getBySlug(req.params.slug, req.user)
             .then( (company) => {
                 data.company = company;
                 return Promise.all([
