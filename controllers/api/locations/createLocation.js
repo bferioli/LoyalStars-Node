@@ -5,7 +5,7 @@ module.exports = (app) => {
 
         const model = new app.LocationModel(req.body);
 
-        app.CompanyModel.getById(req.params.companyId)
+        app.CompanyModel.getById(req.params.companyId, req.user)
             .then( (company) => {
                 model.set({company: company._id});
                 return app.LocationModel.savePromise(model);
