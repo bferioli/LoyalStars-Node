@@ -3,9 +3,13 @@ const ErrorHelpers = require('../../../helpers/error.js');
 module.exports = (app) => {
     const CreateCompanyController = (req, res) => {
 
-        const model = new app.CompanyModel(req.body);
+        if (!req.user)
+            return ErrorHelpers.notFound(res)('You must be logged in to access this endpoint.');
 
-        app.CompanyModel.savePromise(model)
+        const model = new app.CompanyModel(req.body);
+        model.adminUser = req.user._id;
+
+        app.CompanyModel.savePromise(model, req.user)
             .then( (company) => {
                 res.json(company);
             })

@@ -3,7 +3,10 @@ const ErrorHelpers = require('../../../helpers/error.js');
 module.exports = (app) => {
     const DeleteCompanyController = (req, res) => {
 
-        app.CompanyModel.deleteById(req.params.companyId)
+        if (!req.user)
+            return ErrorHelpers.notFound(res)('You must be logged in to access this endpoint.');
+
+        app.CompanyModel.deleteById(req.params.companyId, req.user)
             .then( () => {
                 return app.CheckinModel.deleteByCompany(req.params.companyId);
             })

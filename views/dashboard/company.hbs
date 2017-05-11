@@ -33,7 +33,7 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Account <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="/signout">Sign out</a></li>
+                        <li><a href="/dashboard/logout">Sign out</a></li>
                     </ul>
                 </li>
             </ul>
@@ -43,16 +43,6 @@
 
 <div class="container theme-showcase" id="main" role="main" data-company-id="{{ company.id }}" data-stripe-pk="{{ stripeKey }}">
     <div class="page-header">
-        {% if subscription %}
-        <span class="pull-right">
-            <strong>Subscription:</strong>
-            {{! subscription.name }}
-        </span>
-        {% else %}
-        <span class="pull-right">
-          <strong><a href="#" class="subscribe">Subscribe now</a> to enable your rewards.</strong>
-        </span>
-        {% endif %}
         <h1>{{ company.name }}</h1>
     </div>
 

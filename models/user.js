@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt-nodejs');
+
 module.exports = function(mongoose) {
     const UserSchema = mongoose.Schema({
         name: String,
@@ -10,6 +12,14 @@ module.exports = function(mongoose) {
         companies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Company' }],
         subscriptions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Subscription' }]
     }, { collection: 'User' });
+
+    UserSchema.methods.generateHash = function(password) {
+        return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+    };
+
+    UserSchema.methods.validPassword = function(password) {
+        return bcrypt.compareSync(password, this.password);
+    };
 
     const UserModel = mongoose.model('User', UserSchema);
 

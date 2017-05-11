@@ -8,11 +8,27 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
+// Authentication-specific
+const passport = require('passport');
+const flash    = require('connect-flash');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
+
 const app = express();
 const routes = require('./routes');
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://127.0.0.1:27017/LoyalStars');
+mongoose.connect('mongodb://127.0.0.1:27017/LoyalStars'); // TODO: use password-protected DB configured in .env
+
+app.CheckinModel = require('./models/checkin.js')(mongoose);
+app.CompanyModel = require('./models/company.js')(mongoose);
+app.EarnedRewardModel = require('./models/earnedReward.js')(mongoose);
+app.LocationModel = require('./models/location.js')(mongoose);
+app.RewardModel = require('./models/reward.js')(mongoose);
+app.SubscriptionModel = require('./models/subscription.js')(mongoose);
+app.UserModel = require('./models/user.js')(mongoose);
+
+require('./config/passport')(app, passport);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -26,16 +42,20 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.CheckinModel = require('./models/checkin.js')(mongoose);
-app.CompanyModel = require('./models/company.js')(mongoose);
-app.EarnedRewardModel = require('./models/earnedReward.js')(mongoose);
-app.LocationModel = require('./models/location.js')(mongoose);
-app.RewardModel = require('./models/reward.js')(mongoose);
-app.SubscriptionModel = require('./models/subscription.js')(mongoose);
-app.UserModel = require('./models/user.js')(mongoose);
+// Authentication-specific
+app.use(session({
+  name: 'loyl-session',
+  secret: 'keepthemcomingback', // TODO: store secret in .env
+  store: new MongoStore({ mongooseConnection: mongoose.connection }),
+  resave: true,
+  saveUninitialized: true
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
 
 //  Connect all our routes to our application
-app.use('/', routes(app));
+app.use('/', routes(app, passport));
 
 // catch 404 and forward to error handler
 app.use( (req, res, next) => {

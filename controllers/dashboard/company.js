@@ -1,6 +1,6 @@
 const ErrorHelpers = require('../../helpers/error.js');
 
-module.exports = (app) => {
+module.exports = (app, passport) => {
     const hydrateRewardStats = (reward) => {
         return new Promise( (resolve) => {
             Promise
