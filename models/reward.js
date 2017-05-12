@@ -8,9 +8,22 @@ module.exports = function(mongoose) {
 
     const RewardModel = mongoose.model('Reward', RewardSchema);
 
-    RewardModel.getByCompany = function(companyId) {
-        const query = this.find({company: companyId});
-        return query.exec();
+    RewardModel.getByCompany = function(companyId, user) {
+        return new Promise( (resolve, reject) => {
+            this.findOne({company: companyId})
+                .populate('company')
+                .exec()
+                .then( (reward) => {
+                    if (user.superUser || reward.company.adminUser.equals(user._id)) {
+                        this.find({company: companyId})
+                            .populate('company')
+                            .exec()
+                            .then( (result) => resolve(result) );
+                    } else {
+                        reject('You are not an admin for this company.')
+                    }
+                });
+        });
     };
 
     RewardModel.getById = function(id) {
@@ -18,8 +31,21 @@ module.exports = function(mongoose) {
         return query.exec();
     };
 
-    RewardModel.updateById = function(id, model) {
-        return this.findOneAndUpdate({_id: id}, model, {new: true});
+    RewardModel.updateById = function(id, model, user) {
+        return new Promise( (resolve, reject) => {
+            this.findById(id)
+                .populate('company')
+                .exec()
+                .then( (reward) => {
+                    if (user.superUser || reward.company.adminUser.equals(user._id)) {
+                        this.findOneAndUpdate({_id: id}, model, {new: true})
+                            .exec()
+                            .then( (updated) => resolve(updated) );
+                    } else {
+                        reject('You are not an admin for this company.')
+                    }
+                });
+        });
     };
 
     RewardModel.deleteByCompany = function(companyId) {
@@ -28,10 +54,22 @@ module.exports = function(mongoose) {
         return query.exec();
     };
 
-    RewardModel.deleteById = function(id) {
-        const query = this.find({ _id: id })
-            .remove();
-        return query.exec();
+    RewardModel.deleteById = function(id, user) {
+        return new Promise( (resolve, reject) => {
+            this.findById(id)
+                .populate('company')
+                .exec()
+                .then( (reward) => {
+                    if (user.superUser || reward.company.adminUser.equals(user._id)) {
+                        this.findById(id)
+                            .remove()
+                            .exec()
+                            .then( () => resolve({ deleted: true }) );
+                    } else {
+                        reject('You are not an admin for this company.')
+                    }
+                });
+        });
     };
 
     RewardModel.savePromise = function(model) {

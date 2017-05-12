@@ -15,13 +15,13 @@ module.exports = function(mongoose) {
         return query.exec();
     };
 
-    CompanyModel.getById = function(id, user) {
-        const query = user.superUser ? this.findById(id) : this.findOne({ _id: id, adminUser: user._id });
+    CompanyModel.getById = function(id) {
+        const query = this.findById(id);
         return query.exec();
     };
 
     CompanyModel.getBySlug = function(slug, user) {
-        const query = user.superUser ? this.findOne({ slug }) : this.findOne({ slug, adminUser: user._id });
+        const query = this.findOne({ slug });
         return query.exec();
     };
 

@@ -3,13 +3,18 @@ const ErrorHelpers = require('../../../helpers/error.js');
 module.exports = (app) => {
     const CreateSubscriptionController = (req, res) => {
 
-        const model = new app.SubscriptionModel(req.body);
-
-        // Create stripe customer and subscription
+        if (!req.user)
+            return ErrorHelpers.notFound(res)('You must be logged in to access this endpoint.');
 
         app.LocationModel.getById(req.params.locationId)
             .then( (location) => {
-                model.set({ location: location._id, name: req.params.planId });
+                if (!req.user.superUser && !location.company.adminUser.equals(req.user._id))
+                    return Promise.reject('You are not an admin for this company.');
+
+                // Create stripe customer and subscription
+
+                const model = new app.SubscriptionModel(req.body);
+                model.set({ company: location.company._id, location: location._id, name: req.params.planId });
                 return app.SubscriptionModel.savePromise(model);
             })
             .then( (subscription) => {

@@ -16,16 +16,40 @@ module.exports = function(mongoose) {
         return query.exec();
     };
 
-    EarnedRewardModel.getByCompany = function(companyId) {
-        const query = this.find({company: companyId})
-            .populate('reward');
-        return query.exec();
+    EarnedRewardModel.getByCompany = function(companyId, user) {
+        return new Promise( (resolve, reject) => {
+            this.findOne({'company': companyId})
+                .populate('company')
+                .exec()
+                .then( (earnedReward) => {
+                    if (user.superUser || earnedReward.company.adminUser.equals(user._id)) {
+                        this.find({'company': companyId})
+                            .populate('reward')
+                            .exec()
+                            .then( (result) => resolve(result) );
+                    } else {
+                        reject('You are not an admin for this company.')
+                    }
+                });
+        });
     };
 
-    EarnedRewardModel.getByLocation = function(locationId) {
-        const query = this.find({location: locationId})
-            .populate('reward');
-        return query.exec();
+    EarnedRewardModel.getByLocation = function(locationId, user) {
+        return new Promise( (resolve, reject) => {
+            this.findOne({'location': locationId})
+                .populate('company')
+                .exec()
+                .then( (earnedReward) => {
+                    if (user.superUser || earnedReward.company.adminUser.equals(user._id)) {
+                        this.find({'location': locationId})
+                            .populate('reward')
+                            .exec()
+                            .then( (result) => resolve(result) );
+                    } else {
+                        reject('You are not an admin for this company.')
+                    }
+                });
+        });
     };
 
     EarnedRewardModel.getByReward = function(rewardId) {

@@ -3,10 +3,7 @@ const ErrorHelpers = require('../../../helpers/error.js');
 module.exports = (app) => {
     const CompanyController = (req, res) => {
 
-        if (!req.user)
-            return ErrorHelpers.notFound(res)('You must be logged in to access this endpoint.');
-
-        app.CompanyModel.getById(req.params.companyId, req.user)
+        app.CompanyModel.getById(req.params.companyId)
             .then( (company) => {
                 res.json(company);
             })

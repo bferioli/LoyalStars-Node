@@ -29,8 +29,8 @@ module.exports = (app, passport) => {
             .then( (company) => {
                 data.company = company;
                 return Promise.all([
-                    app.LocationModel.getByCompany(company._id),
-                    app.RewardModel.getByCompany(company._id)
+                    app.LocationModel.getByCompany(company._id, req.user),
+                    app.RewardModel.getByCompany(company._id, req.user)
                 ]);
             })
             .then( ([locations, rewards]) => {
