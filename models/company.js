@@ -30,7 +30,7 @@ module.exports = function(mongoose) {
             this.findById(id)
                 .exec()
                 .then( (company) => {
-                    if (!location) {
+                    if (!company) {
                         reject('Company not found.');
                     } else if (user.superUser || company.adminUser.equals(user._id)) {
                         this.findOneAndUpdate({_id: id}, model, {new: true})
@@ -48,7 +48,7 @@ module.exports = function(mongoose) {
             this.findById(id)
                 .exec()
                 .then( (company) => {
-                    if (!location) {
+                    if (!company) {
                         reject('Company not found.');
                     } else if (user.superUser || company.adminUser.equals(user._id)) {
                         this.findById(id)
