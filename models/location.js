@@ -33,14 +33,16 @@ module.exports = function(mongoose) {
                 .populate('company')
                 .exec()
                 .then( (location) => {
-                    if (user.superUser || location.company.adminUser.equals(user._id)) {
+                    if (!location) {
+                        resolve([]);
+                    } else if (user.superUser || location.company.adminUser.equals(user._id)) {
                         this.find({company: companyId})
                             .populate('company')
                             .populate('reward')
                             .exec()
                             .then( (result) => resolve(result) );
                     } else {
-                        reject('You are not an admin for this company.')
+                        reject('You are not an admin for this company.');
                     }
                 });
         });
@@ -66,12 +68,14 @@ module.exports = function(mongoose) {
                 .populate('company')
                 .exec()
                 .then( (location) => {
-                    if (user.superUser || location.company.adminUser.equals(user._id)) {
+                    if (!location) {
+                        reject('Location not found.');
+                    } else if (user.superUser || location.company.adminUser.equals(user._id)) {
                         this.findOneAndUpdate({_id: id}, model, {new: true})
                             .exec()
                             .then( (updated) => resolve(updated) );
                     } else {
-                        reject('You are not an admin for this company.')
+                        reject('You are not an admin for this company.');
                     }
                 });
         });
@@ -83,13 +87,15 @@ module.exports = function(mongoose) {
                 .populate('company')
                 .exec()
                 .then( (location) => {
-                    if (user.superUser || location.company.adminUser.equals(user._id)) {
+                    if (!location) {
+                        reject('Location not found.');
+                    } else if (user.superUser || location.company.adminUser.equals(user._id)) {
                         this.find({ _id: id })
                             .remove()
                             .exec()
                             .then( () => resolve({ deleted: true }) );
                     } else {
-                        reject('You are not an admin for this company.')
+                        reject('You are not an admin for this company.');
                     }
                 });
         });
@@ -101,13 +107,15 @@ module.exports = function(mongoose) {
                 .populate('company')
                 .exec()
                 .then( (location) => {
-                    if (user.superUser || location.company.adminUser.equals(user._id)) {
+                    if (!location) {
+                        reject('Location not found.');
+                    } else if (user.superUser || location.company.adminUser.equals(user._id)) {
                         this.findById(id)
                             .remove()
                             .exec()
                             .then( () => resolve({ deleted: true }) );
                     } else {
-                        reject('You are not an admin for this company.')
+                        reject('You are not an admin for this company.');
                     }
                 });
         });

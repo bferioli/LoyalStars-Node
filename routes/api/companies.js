@@ -28,7 +28,6 @@ module.exports = (app) => {
 
     companies.get("/:companyId/locations", CompanyLocationsController);
     companies.post("/:companyId/locations", CreateCompanyLocationController);
-    companies.post("/:companyId/locations", CreateCompanyLocationController);
     companies.put("/:companyId/locations/:locationId", UpdateCompanyLocationController);
 
     companies.get("/:companyId/checkins", CompanyCheckinsController);

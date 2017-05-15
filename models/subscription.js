@@ -20,7 +20,9 @@ module.exports = function(mongoose) {
                 .populate('company')
                 .exec()
                 .then( (subscription) => {
-                    if (user.superUser || subscription.company.adminUser.equals(user._id)) {
+                    if (!subscription) {
+                        resolve([]);
+                    } else if (user.superUser || subscription.company.adminUser.equals(user._id)) {
                         this.find({'location': locationId})
                             .exec()
                             .then( (result) => resolve(result) );

@@ -14,7 +14,9 @@ module.exports = function(mongoose) {
                 .populate('company')
                 .exec()
                 .then( (reward) => {
-                    if (user.superUser || reward.company.adminUser.equals(user._id)) {
+                    if (!reward) {
+                        resolve([]);
+                    } else if (user.superUser || reward.company.adminUser.equals(user._id)) {
                         this.find({company: companyId})
                             .populate('company')
                             .exec()
@@ -37,7 +39,9 @@ module.exports = function(mongoose) {
                 .populate('company')
                 .exec()
                 .then( (reward) => {
-                    if (user.superUser || reward.company.adminUser.equals(user._id)) {
+                    if (!reward) {
+                        reject('Reward not found.');
+                    } else if (user.superUser || reward.company.adminUser.equals(user._id)) {
                         this.findOneAndUpdate({_id: id}, model, {new: true})
                             .exec()
                             .then( (updated) => resolve(updated) );
@@ -60,7 +64,9 @@ module.exports = function(mongoose) {
                 .populate('company')
                 .exec()
                 .then( (reward) => {
-                    if (user.superUser || reward.company.adminUser.equals(user._id)) {
+                    if (!reward) {
+                        reject('Reward not found.');
+                    } else if (user.superUser || reward.company.adminUser.equals(user._id)) {
                         this.findById(id)
                             .remove()
                             .exec()

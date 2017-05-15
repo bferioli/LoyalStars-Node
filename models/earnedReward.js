@@ -22,7 +22,9 @@ module.exports = function(mongoose) {
                 .populate('company')
                 .exec()
                 .then( (earnedReward) => {
-                    if (user.superUser || earnedReward.company.adminUser.equals(user._id)) {
+                    if (!earnedReward) {
+                        resolve([]);
+                    } else if (user.superUser || earnedReward.company.adminUser.equals(user._id)) {
                         this.find({'company': companyId})
                             .populate('reward')
                             .exec()
@@ -40,7 +42,9 @@ module.exports = function(mongoose) {
                 .populate('company')
                 .exec()
                 .then( (earnedReward) => {
-                    if (user.superUser || earnedReward.company.adminUser.equals(user._id)) {
+                    if (!earnedReward) {
+                        resolve([]);
+                    } else if (user.superUser || earnedReward.company.adminUser.equals(user._id)) {
                         this.find({'location': locationId})
                             .populate('reward')
                             .exec()

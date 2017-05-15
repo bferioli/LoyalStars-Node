@@ -7,7 +7,7 @@ module.exports = (app) => {
     const ConfirmController = require('../../controllers/api/checkins/confirm')(app);
 
     checkins.get("/:checkinCode/:phone", CheckinController);
-    checkins.post("/:checkinCode/:phone/confirm", ConfirmController);
+    checkins.post("/:checkinCode/:phone", ConfirmController);
 
     return checkins;
 };

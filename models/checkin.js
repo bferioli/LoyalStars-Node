@@ -24,12 +24,14 @@ module.exports = function(mongoose) {
                 .populate('company')
                 .exec()
                 .then( (checkin) => {
-                    if (user.superUser || checkin.company.adminUser.equals(user._id)) {
+                    if (!checkin) {
+                        resolve([]);
+                    } else if (user.superUser || checkin.company.adminUser.equals(user._id)) {
                         this.find({'company': companyId})
                             .exec()
                             .then( (result) => resolve(result) );
                     } else {
-                        reject('You are not an admin for this company.')
+                        reject('You are not an admin for this company.');
                     }
                 });
         });
@@ -41,12 +43,14 @@ module.exports = function(mongoose) {
                 .populate('company')
                 .exec()
                 .then( (checkin) => {
-                    if (user.superUser || checkin.company.adminUser.equals(user._id)) {
+                    if (!checkin) {
+                        resolve([]);
+                    } else if (user.superUser || checkin.company.adminUser.equals(user._id)) {
                         this.find({'location': locationId})
                             .exec()
                             .then( (result) => resolve(result) );
                     } else {
-                        reject('You are not an admin for this company.')
+                        reject('You are not an admin for this company.');
                     }
                 });
         });
@@ -67,19 +71,21 @@ module.exports = function(mongoose) {
         return query.exec();
     };
 
-    CheckinModel.deleteByCompany = function(companyId) {
+    CheckinModel.deleteByCompany = function(companyId, user) {
         return new Promise( (resolve, reject) => {
             this.findOne({'company': companyId})
                 .populate('company')
                 .exec()
                 .then( (checkin) => {
-                    if (user.superUser || checkin.company.adminUser.equals(user._id)) {
+                    if (!checkin) {
+                        reject('No checkins found.');
+                    } else if (user.superUser || checkin.company.adminUser.equals(user._id)) {
                         this.find({'company': companyId})
                             .remove()
                             .exec()
                             .then( () => resolve({ deleted: true }) );
                     } else {
-                        reject('You are not an admin for this company.')
+                        reject('You are not an admin for this company.');
                     }
                 });
         });
