@@ -37,6 +37,7 @@ define([
       this.childView = new options.view({ model: model });
       this.$el.append(this.childView.$el);
 
+      $.material.init();
 
       model.on('error', this.showError);
       model.on('sync', $.proxy(this.childView.render, this.childView));
@@ -104,7 +105,7 @@ define([
     launchSubscription: function(e) {
       if (e && typeof e.preventDefault !== 'undefined')
         e.preventDefault();
-      this.childView = new SubscribeView({ locationId: this.location.id, stripeKey: this.stripeKey });
+      this.childView = new SubscribeView({ email: this.email, locationId: this.location.id, stripeKey: this.stripeKey });
       this.$el.append(this.childView.$el);
     },
     subscribeOrRefresh: function() {
@@ -142,7 +143,7 @@ define([
         this.childView.on('saveSuccess', rewardCallback);
       }
     },
-    rewardCallback: function(options) {
+    rewardCallback: function() {
       this.subscribeOrRefresh();
     },
     refreshPage: function() {
@@ -164,7 +165,9 @@ define([
     },
     initialize: function() {
       this.companyId = this.$el.data('company-id');
+      this.email = this.$el.data('email');
       this.stripeKey = this.$el.data('stripe-pk');
+      $.material.init();
     }
   });
 

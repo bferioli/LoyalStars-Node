@@ -3,7 +3,9 @@ define([
   'underscore',
   'backbone',
   'views/dashboardView',
-  'bootstrap'
+  'bootstrap',
+  'material',
+  'ripples'
 ], function($, _, Backbone, DashboardView){
   var LoylAdmin = {
     initialize: function() {

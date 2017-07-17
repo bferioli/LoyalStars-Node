@@ -33,8 +33,7 @@ define([
       saveCompany();
     },
     validateForm: function() {
-      var self = this,
-          $footer = this.$el.find('.modal-footer'),
+      var $footer = this.$el.find('.modal-footer'),
           $requiredFields = this.$fields.find('[required]'),
           missingFields = [],
           errorMsg;
@@ -88,7 +87,7 @@ define([
           break;
       }
     },
-    initialize: function(options) {
+    initialize: function() {
       this.template = _.template(createCompanyViewTemplate);
       this.render();
       this.$el.modal({ backdrop: 'static' });

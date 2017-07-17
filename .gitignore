@@ -34,3 +34,9 @@ npm-debug.log
 
 # Node environment variables
 .env
+
+# MacOS DS_Store files
+.DS_Store
+
+# Sass cache files
+.sass-cache

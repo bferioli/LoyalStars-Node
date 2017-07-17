@@ -7,7 +7,7 @@
     <div class="modal-body">
       <table id="admin-table">
         <tbody id="location-tbody">
-          <tr>
+          <tr class="form-group">
             <td>Name</td>
             <td class="value">
               <div class="admin-field" data-type="text">
@@ -15,7 +15,7 @@
               </div>
             </td>
           </tr>
-          <tr>
+          <tr class="form-group">
             <td>
               Check-in code<br>
               <span class="small-label">
@@ -29,7 +29,7 @@
               </div>
             </td>
           </tr>
-          <tr>
+          <tr class="form-group">
             <td>Address</td>
             <td class="value">
               <div class="admin-field" data-type="text">
@@ -37,7 +37,7 @@
               </div>
             </td>
           </tr>
-          <tr>
+          <tr class="form-group">
             <td>City</td>
             <td class="value">
               <div class="admin-field" data-type="text">
@@ -45,7 +45,7 @@
               </div>
             </td>
           </tr>
-          <tr>
+          <tr class="form-group">
             <td>State</td>
             <td class="value">
               <div class="admin-field" data-type="select" data-autoselect="true">
@@ -105,7 +105,7 @@
               </div>
             </td>
           </tr>
-          <tr>
+          <tr class="form-group">
             <td>Zip</td>
             <td class="value">
               <div class="admin-field" data-type="text">
@@ -115,7 +115,7 @@
           </tr>
         </tbody>
         <tbody class="hidden" id="geo-tbody">
-          <tr>
+          <tr class="form-group">
             <td class="section-divider" colspan="2">
               <h4>Location Verification</h4>
               <p>This feature uses the customer's physical location to verify their presence at your business when checkin in. Would you like to enable to location verification?</p>
@@ -133,14 +133,14 @@
               </p>
             </td>
           </tr>
-          <tr class="geo-row hidden">
+          <tr class="form-group geo-row hidden">
             <td></td>
             <td>
-              <button class="btn btn-warning geo-by-address">Fetch from address</button>
+              <button class="btn btn-primary btn-raised geo-by-address">Fetch from address</button>
               <button class="btn btn-default geo-by-current">Fetch from my current location</button>
             </td>
           </tr>
-          <tr class="geo-row hidden">
+          <tr class="form-group geo-row hidden">
             <td>Latitude</td>
             <td class="value">
               <div class="admin-field" data-type="text">
@@ -148,7 +148,7 @@
               </div>
             </td>
           </tr>
-          <tr class="geo-row hidden">
+          <tr class="form-group geo-row hidden">
             <td>Longitude</td>
             <td class="value">
               <div class="admin-field" data-type="text">
@@ -158,13 +158,13 @@
           </tr>
         </tbody>
         <tbody class="hidden" id="offer-tbody">
-          <tr>
+          <tr class="form-group">
             <td class="section-divider" colspan="2">
               <h4>Choose Your Reward</h4>
               <p>Decide what your customers will earn when they check in. If you don't have any rewards set up yet, you can create one now.</p>
             </td>
           </tr>
-          <tr class="reward-row">
+          <tr class="form-group reward-row">
             <td>Choose reward</td>
             <td class="value">
               <div class="admin-field" data-type="select">
@@ -178,9 +178,9 @@
       </table>
     </div>
     <div class="modal-footer">
-      <button class="admin-prev btn btn-default hidden">Back</button>
-      <button class="admin-next btn btn-warning">Next</button>
-      <button class="admin-submit btn btn-warning hidden">Save</button>
+      <button class="admin-prev btn btn-blue-grey hidden">Back</button>
+      <button class="admin-next btn btn-primary btn-raised">Next</button>
+      <button class="admin-submit btn btn-primary btn-raised hidden">Save</button>
     </div>
   </div><!-- /.modal-content -->
 </div><!-- /.modal-dialog -->

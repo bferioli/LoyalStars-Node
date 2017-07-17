@@ -39,6 +39,7 @@ module.exports = function(mongoose) {
                         this.find({company: companyId})
                             .populate('company')
                             .populate('reward')
+                            .populate('subscription')
                             .exec()
                             .then( (result) => resolve(result) );
                     } else {

@@ -8,7 +8,7 @@ module.exports = (app, passport) => {
 
         app.CompanyModel.getAll(req.user)
             .then( (companies) => {
-                res.render('dashboard/index', { companies, stripeKey: process.env.STRIPE_PUBLIC_KEY });
+                res.render('dashboard/index', { companies, stripeKey: process.env.STRIPE_PUBLIC_KEY, user: req.user });
             })
             .catch(ErrorHelpers.notFound(res));
     };

@@ -50,8 +50,7 @@ define([
       });
     },
     validateForm: function() {
-      var self = this,
-          $footer = this.$el.find('.modal-footer'),
+      var $footer = this.$el.find('.modal-footer'),
           $requiredFields = this.$fields.find('[required]'),
           missingFields = [],
           errorMsg;
@@ -105,7 +104,7 @@ define([
     },
     geoByCurrent: function() {
       if ("geolocation" in navigator) {
-        var errorCallbackHighAccuracy = function(position) {
+        var errorCallbackHighAccuracy = function() {
           navigator.geolocation.getCurrentPosition(
             $.proxy(successCallback, this),
             $.proxy(errorCallbackLowAccuracy, this),
@@ -265,7 +264,7 @@ define([
         }
       }
     },
-    initialize: function(options) {
+    initialize: function() {
       this.template = _.template(createLocationViewTemplate);
       this.render();
       this.$el.modal({ backdrop: 'static' });

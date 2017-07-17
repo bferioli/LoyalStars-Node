@@ -5,6 +5,8 @@ require.config({
     'underscore': 'libs/underscore.min',
     'backbone': 'libs/backbone.min',
     'bootstrap': 'libs/bootstrap.min',
+    'material': 'libs/material.min',
+    'ripples': 'libs/ripples.min',
     'jquery': 'libs/jquery.min',
     'datetimepicker': 'libs/jquery.datetimepicker',
     'inputmask': 'libs/jquery.inputmask.min',
@@ -14,6 +16,8 @@ require.config({
   shim: {
     'backbone': ['underscore'],
     'bootstrap': ['jquery'],
+    'material': ['jquery'],
+    'ripples': ['jquery'],
     'datetimepicker': ['jquery'],
     'inputmask': ['jquery']
   }

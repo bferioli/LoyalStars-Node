@@ -7,9 +7,6 @@ module.exports = function(mongoose) {
         name: String,
         featuresEnabled: String,
         activeUntil: Date,
-        stripeToken: String,
-        stripeTokenType: String,
-        stripeEmail: String,
     }, { collection: 'Subscription' });
 
     const SubscriptionModel = mongoose.model('Subscription', SubscriptionSchema);

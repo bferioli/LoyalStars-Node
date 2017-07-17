@@ -4,8 +4,12 @@
 <head>
     <title>LOYL Admin</title>
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <!-- Material Design fonts -->
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
     <link rel="stylesheet" href="/stylesheets/dashboard.css">
 </head>
 
@@ -31,7 +35,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Account <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Account</a>
                     <ul class="dropdown-menu">
                         <li><a href="/dashboard/logout">Sign out</a></li>
                     </ul>
@@ -41,32 +45,28 @@
     </div><!-- /.container-fluid -->
 </nav>
 
-<div class="container theme-showcase" id="main" role="main" data-stripe-pk="{{ stripeKey }}">
-    <div class="page-header">
-        <button class="create-company btn btn-large btn-warning pull-right">Set up your company</button>
-        <h1>My companies</h1>
+<div class="container theme-showcase" id="main" role="main" data-email="{{ user.email }}" data-stripe-pk="{{ stripeKey }}">
+
+    <div class="section-heading clearfix">
+        <button class="create-company btn btn-large btn-primary btn-raised pull-right">Set up your company</button>
+        <h2>My Companies</h2>
     </div>
-    <div class="main-list-container">
-        <div class="list-table panel panel-default">
-            <table class="table" id="companies-list">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th># of check-ins</th>
-                    <th># of rewards earned</th>
-                </tr>
-                </thead>
-                <tbody id="companies-list-body">
-                {{#each companies}}
-                <tr class="companies-list-item" data-id="{{ this.id }}">
-                    <td><a href="/dashboard/company/{{ this.slug }}"><strong>{{ this.name }}</strong></a></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                {{/each}}
-                </tbody>
-            </table>
-        </div>
+
+    <div class="row main-list-container">
+
+        <!-- Companies -->
+        {{#each companies}}
+            <div class="companies-list-item" data-id="{{ this.id }}">
+                <div class="panel panel-info">
+                    <div class="panel-body">
+                        <a href="/dashboard/company/{{ this.slug }}" class="panel-title">
+                            <h3>{{ this.name }}</h3>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {{/each}}
+
     </div>
 </div>
 

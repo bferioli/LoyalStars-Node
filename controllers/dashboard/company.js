@@ -41,7 +41,7 @@ module.exports = (app, passport) => {
                 return Promise.all(promises);
             })
             .then( () => {
-                res.render('dashboard/company', { company: data.company, locations: data.locations, rewards: data.rewards, stripeKey: process.env.STRIPE_PUBLIC_KEY });
+                res.render('dashboard/company', Object.assign(data, { stripeKey: process.env.STRIPE_PUBLIC_KEY, user: req.user }));
             })
             .catch(ErrorHelpers.notFound(res));
     };
