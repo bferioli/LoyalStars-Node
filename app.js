@@ -14,10 +14,6 @@ const MongoStore = require('connect-mongo')(session);
 
 const app = express();
 
-if (app.get('env') !== 'production') {
-  require('dotenv').config();
-}
-
 const routes = require('./routes');
 
 mongoose.Promise = global.Promise;
