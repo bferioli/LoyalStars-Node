@@ -3466,65 +3466,65 @@ hr.on-light {
 .loyalty-dashboard #admin-table td.section-divider {
   padding-top: 0px;
 }
-/* line 65, ../sass/dashboard.sass */
+/* line 64, ../sass/dashboard.sass */
 .loyalty-dashboard #admin-table .narrow-cell {
   padding: 0 10px;
 }
-/* line 67, ../sass/dashboard.sass */
+/* line 66, ../sass/dashboard.sass */
 .loyalty-dashboard #admin-table .submit-cell {
   text-align: center;
   padding-top: 40px;
 }
-/* line 70, ../sass/dashboard.sass */
+/* line 69, ../sass/dashboard.sass */
 .loyalty-dashboard #admin-table .admin-submit {
   font-weight: 500;
   font-size: 18px;
   padding: 10px 90px;
 }
 @media (min-width: 768px) {
-  /* line 75, ../sass/dashboard.sass */
+  /* line 74, ../sass/dashboard.sass */
   .loyalty-dashboard #admin-table td + td {
     min-width: 380px;
   }
 }
-/* line 77, ../sass/dashboard.sass */
+/* line 76, ../sass/dashboard.sass */
 .loyalty-dashboard .list-table {
   width: 100%;
   margin-bottom: 30px;
 }
-/* line 80, ../sass/dashboard.sass */
+/* line 79, ../sass/dashboard.sass */
 .loyalty-dashboard .list-table .panel-heading {
   font-size: 16px;
   font-weight: bold;
 }
-/* line 83, ../sass/dashboard.sass */
+/* line 82, ../sass/dashboard.sass */
 .loyalty-dashboard .list-table .btn {
   margin: 15px;
 }
-/* line 85, ../sass/dashboard.sass */
+/* line 84, ../sass/dashboard.sass */
 .loyalty-dashboard .geo-toggle, .loyalty-dashboard .offer-toggle {
   margin-right: 5px;
 }
-/* line 87, ../sass/dashboard.sass */
+/* line 86, ../sass/dashboard.sass */
 .loyalty-dashboard .subscription-table {
   text-align: center;
   border-radius: 5px;
 }
-/* line 90, ../sass/dashboard.sass */
+/* line 89, ../sass/dashboard.sass */
 .loyalty-dashboard .subscription-table td.monthly-spacer {
   height: 120px;
 }
-/* line 92, ../sass/dashboard.sass */
+/* line 91, ../sass/dashboard.sass */
 .loyalty-dashboard .subscription-table th, .loyalty-dashboard .subscription-table td {
   text-align: center;
   padding: 8px 15px;
   border: 1px solid #eee;
 }
-/* line 97, ../sass/dashboard.sass */
+/* line 96, ../sass/dashboard.sass */
 .loyalty-dashboard .subscription-table.featured th, .loyalty-dashboard .subscription-table.featured td {
   border-color: rgba(255, 255, 255, 0.1);
 }
-/* line 99, ../sass/dashboard.sass */
+/* line 98, ../sass/dashboard.sass */
 .loyalty-dashboard .subscription-table h3 {
   margin: 10px 0;
 }
