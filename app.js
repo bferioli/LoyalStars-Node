@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 const express = require('express');
 const path = require('path');
 const favicon = require('serve-favicon');
@@ -15,6 +13,11 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 
 const app = express();
+
+if (app.get('env') !== 'production') {
+  require('dotenv').config();
+}
+
 const routes = require('./routes');
 
 mongoose.Promise = global.Promise;
