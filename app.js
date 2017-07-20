@@ -91,6 +91,6 @@ app.use( (err, req, res) => {
   });
 });
 
-app.listen(3000);
+app.listen(process.env.HTTP_PORT);
 
 module.exports = app;
