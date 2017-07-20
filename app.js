@@ -14,6 +14,10 @@ const MongoStore = require('connect-mongo')(session);
 
 const app = express();
 
+if (app.get('env') !== 'production') {
+  require('dotenv').config();
+}
+
 const routes = require('./routes');
 
 mongoose.Promise = global.Promise;
@@ -87,6 +91,6 @@ app.use( (err, req, res) => {
   });
 });
 
-app.listen(process.env.HTTP_PORT);
+app.listen(process.env.PORT);
 
 module.exports = app;
