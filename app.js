@@ -18,7 +18,7 @@ const app = express();
 const routes = require('./routes');
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://127.0.0.1:27017/LoyalStars'); // TODO: use password-protected DB configured in .env
+mongoose.connect(process.env.MONGODB_URL);
 
 app.CheckinModel = require('./models/checkin.js')(mongoose);
 app.CompanyModel = require('./models/company.js')(mongoose);
