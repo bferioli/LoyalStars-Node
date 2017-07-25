@@ -4,6 +4,7 @@ module.exports = (app, passport) => {
     const dashboard = require('./dashboard');
     const twilio = require('./twilio');
     const express = require('express');
+    const path = require('path');
 
     routes.use('/api', api(app));
     routes.use('/dashboard', dashboard(app, passport));
@@ -11,7 +12,7 @@ module.exports = (app, passport) => {
 
     if (app.get('env') === 'production') {
         // Direct all unhandled requests to React client
-        routes.use(express.static('client/build'));
+        routes.use(express.static(path.join(__dirname + '/../client/build')));
     }
 
     return routes;
