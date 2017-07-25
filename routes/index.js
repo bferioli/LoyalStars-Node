@@ -11,9 +11,7 @@ module.exports = (app, passport) => {
 
     if (app.get('env') === 'production') {
         // Direct all unhandled requests to React client
-        routes.get('*', (req, res) => {
-            res.sendFile(path.join(__dirname + '/../client/build/index.html'));
-        });
+        routes.use(express.static('client/build'));
     }
 
     return routes;
