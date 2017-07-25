@@ -3,7 +3,7 @@ module.exports = (app, passport) => {
     const api = require('./api');
     const dashboard = require('./dashboard');
     const twilio = require('./twilio');
-    const path = require('path');
+    const express = require('express');
 
     routes.use('/api', api(app));
     routes.use('/dashboard', dashboard(app, passport));
