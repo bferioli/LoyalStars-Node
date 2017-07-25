@@ -3,7 +3,10 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node app.js"
+    "start": "concurrently \"npm run app\" \"npm run dev-client\"",
+    "app": "node app.js",
+    "dev-client": "node dev-client.js",
+    "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build"
   },
   "dependencies": {
     "bases": "~0.2.1",
@@ -29,5 +32,8 @@
     "stripe": "~4.7.0",
     "time": "~0.11.4",
     "twilio": "~2.9.1"
+  },
+  "devDependencies": {
+    "concurrently": "^3.5.0"
   }
 }
