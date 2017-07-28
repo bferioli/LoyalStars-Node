@@ -8,9 +8,6 @@ const mongoose = require('mongoose');
 
 // Authentication-specific
 const passport = require('passport');
-const flash    = require('connect-flash');
-const session = require('express-session');
-const MongoStore = require('connect-mongo')(session);
 
 const app = express();
 
@@ -45,17 +42,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Authentication-specific
-app.use(session({
-  name: 'loyl-session',
-  secret: 'keepthemcomingback', // TODO: store secret in .env
-  store: new MongoStore({ mongooseConnection: mongoose.connection }),
-  resave: true,
-  saveUninitialized: true
-}));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(flash());
 
 // Connect all our routes to our application
 app.use('/', routes(app, passport));
