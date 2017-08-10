@@ -5,6 +5,10 @@
  */
 
 const LocalStrategy = require('passport-local').Strategy;
+const passportJWT = require("passport-jwt");
+const ExtractJwt = passportJWT.ExtractJwt;
+const JwtStrategy = passportJWT.Strategy;
+
 const jwt = require('jsonwebtoken');
 
 module.exports = function(app, passport) {
@@ -24,25 +28,25 @@ module.exports = function(app, passport) {
         session: false
     },
     function(req, email, password, done) {
-        app.UserModel.findOne({ 'email' :  email }, function(err, user) {
+        app.UserModel.findOne({ 'email' :  email }, function(err, existing) {
             if (err)
                 return done(err);
 
-            if (user) {
+            if (existing) {
                 return done(null, false, done('That email is already taken.'));
             } else {
-                var newUser = new app.UserModel();
-                newUser.email = email;
-                newUser.password = newUser.generateHash(password);
+                const user = new app.UserModel();
+                user.email = email;
+                user.password = user.generateHash(password);
 
-                newUser.save(function(err) {
+                user.save(function(err) {
                     if (err)
                         throw err;
 
-                    const payload = ({_id, email} = newUser);
+                    const payload = { _id: user._id, email: user.email };
                     const token = jwt.sign(payload, process.env.JWT_SECRET);
 
-                    return done(null, token);
+                    return done(null, { token, user });
                 });
             }
 
@@ -66,11 +70,27 @@ module.exports = function(app, passport) {
             if (!user.validPassword(password))
                 return done(null, false, done('Oops! Wrong password.' )); // create the loginMessage and save it to session as flashdata
 
-            const payload = ({_id, email} = user);
+            const payload = { _id: user._id, email: user.email };
             const token = jwt.sign(payload, process.env.JWT_SECRET);
 
-            return done(null, token);
+            return done(null, { token, user });
         });
 
     }));
+
+    passport.use('jwt-verify', new JwtStrategy({
+        jwtFromRequest: ExtractJwt.fromAuthHeader(),
+        secretOrKey: process.env.JWT_SECRET
+    },
+    function(jwt_payload, done) {
+        app.UserModel.findOne({ '_id' :  jwt_payload._id }, function(err, user) {
+            if (err)
+                return done(err);
+            if (user)
+                return done(null, user);
+            else
+                return done(null, false);
+        });
+    }));
+
 };

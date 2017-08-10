@@ -4,6 +4,15 @@ import rightArrow from '../../images/right-arrow.svg';
 
 class AccountForm extends ValidatedForm {
 
+    constructor() {
+        super();
+        const token = localStorage.getItem('loyl-session');
+
+        if (token) {
+
+        }
+    }
+
     state = {
         username: '',
         password: '',
@@ -25,9 +34,10 @@ class AccountForm extends ValidatedForm {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             }
-        }).then(function(response) {
-            localStorage.setItem('loyl-session', response);
-        }).catch(function(err) {
+        })
+        .then(response => response.json())
+        .then(json => localStorage.setItem('loyl-session', json.token))
+        .catch(function(err) {
             // Error :(
         });
     };

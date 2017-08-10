@@ -1,4 +1,4 @@
-module.exports = (app) => {
+module.exports = (app, passport) => {
     const rewards = require('express').Router();
 
     // Reward query routes
@@ -8,8 +8,8 @@ module.exports = (app) => {
     const UpdateRewardController = require('../../controllers/api/rewards/updateReward')(app);
 
     rewards.get("/:rewardId", RewardController);
-    rewards.delete("/:rewardId", DeleteRewardController);
-    rewards.put("/:rewardId", UpdateRewardController);
+    rewards.delete("/:rewardId", passport.authenticate('jwt-verify'), DeleteRewardController);
+    rewards.put("/:rewardId", passport.authenticate('jwt-verify'), UpdateRewardController);
 
     return rewards;
 };

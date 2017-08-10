@@ -1,4 +1,4 @@
-module.exports = (app) => {
+module.exports = (app, passport) => {
     const companies = require('express').Router();
 
     // Company query routes
@@ -21,21 +21,21 @@ module.exports = (app) => {
     const CompanyEarnedRewardsController = require('../../controllers/api/earnedRewards/earnedRewardsByCompany')(app);
 
     companies.get("/:companyId", CompanyController);
-    companies.get("/", CompaniesController);
-    companies.post("/", CreateCompanyController);
-    companies.delete("/:companyId", DeleteCompanyController);
-    companies.put("/:companyId", UpdateCompanyController);
+    companies.get("/", passport.authenticate('jwt-verify'), CompaniesController);
+    companies.post("/", passport.authenticate('jwt-verify'), CreateCompanyController);
+    companies.delete("/:companyId", passport.authenticate('jwt-verify'), DeleteCompanyController);
+    companies.put("/:companyId", passport.authenticate('jwt-verify'), UpdateCompanyController);
 
-    companies.get("/:companyId/locations", CompanyLocationsController);
-    companies.post("/:companyId/locations", CreateCompanyLocationController);
-    companies.put("/:companyId/locations/:locationId", UpdateCompanyLocationController);
+    companies.get("/:companyId/locations", passport.authenticate('jwt-verify'), CompanyLocationsController);
+    companies.post("/:companyId/locations", passport.authenticate('jwt-verify'), CreateCompanyLocationController);
+    companies.put("/:companyId/locations/:locationId", passport.authenticate('jwt-verify'), UpdateCompanyLocationController);
 
-    companies.get("/:companyId/checkins", CompanyCheckinsController);
-    companies.delete("/:companyId/checkins", DeleteCompanyCheckinsController);
+    companies.get("/:companyId/checkins", passport.authenticate('jwt-verify'), CompanyCheckinsController);
+    companies.delete("/:companyId/checkins", passport.authenticate('jwt-verify'), DeleteCompanyCheckinsController);
 
-    companies.get("/:companyId/rewards", CompanyRewardsController);
-    companies.post("/:companyId/rewards", CreateCompanyRewardController);
-    companies.get("/:companyId/earned-rewards", CompanyEarnedRewardsController);
+    companies.get("/:companyId/rewards", passport.authenticate('jwt-verify'), CompanyRewardsController);
+    companies.post("/:companyId/rewards", passport.authenticate('jwt-verify'), CreateCompanyRewardController);
+    companies.get("/:companyId/earned-rewards", passport.authenticate('jwt-verify'), CompanyEarnedRewardsController);
 
     return companies;
 };

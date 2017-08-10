@@ -16,13 +16,17 @@ module.exports = (app, passport) => {
         res.json(req.user);
     });
 
+    api.post("/verify", passport.authenticate('jwt-verify'), function(req, res) {
+        res.json(req.user);
+    });
+
     api.use('/checkins', checkins(app));
-    api.use('/companies', companies(app));
+    api.use('/companies', companies(app, passport));
     api.use('/earned-rewards', earnedRewards(app));
-    api.use('/locations', locations(app));
+    api.use('/locations', locations(app, passport));
     api.use('/nearby', nearby(app));
-    api.use('/rewards', rewards(app));
-    api.use('/subscriptions', subscriptions(app));
+    api.use('/rewards', rewards(app, passport));
+    api.use('/subscriptions', subscriptions(app, passport));
 
     return api;
 };
