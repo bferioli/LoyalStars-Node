@@ -1,45 +1,25 @@
 import React from 'react';
+import Auth from '../../helpers/Auth';
 import ValidatedForm from '../form/ValidatedForm';
 import rightArrow from '../../images/right-arrow.svg';
 
 class AccountForm extends ValidatedForm {
 
-    constructor() {
-        super();
-        const token = localStorage.getItem('loyl-session');
-
-        if (token) {
-
-        }
-    }
-
     state = {
-        username: '',
+        email: '',
         password: '',
         confirmPassword: ''
     };
 
     validators = {
         // eslint-disable-next-line
-        username: value => /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value),
+        email: value => /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value),
         password: value => value.length >= 6,
         confirmPassword: value => value === this.state.password
     };
 
     submitAction = (data) => {
-        fetch('/api/signup', {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(json => localStorage.setItem('loyl-session', json.token))
-        .catch(function(err) {
-            // Error :(
-        });
+        Auth.signUp(JSON.stringify(data));
     };
 
     render() {
@@ -50,9 +30,9 @@ class AccountForm extends ValidatedForm {
         return (
             <form className="AccountForm" onSubmit={this.handleSubmit}>
                 <input
-                    className={shouldMarkError('username') ? "error" : ""}
+                    className={shouldMarkError('email') ? "error" : ""}
                     type="text"
-                    name="username"
+                    name="email"
                     placeholder="Email"
                     value={this.state.username}
                     onChange={this.handleChange}

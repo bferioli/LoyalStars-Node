@@ -24,6 +24,8 @@ module.exports = function(app, passport) {
     });
 
     passport.use('local-signup', new LocalStrategy({
+        usernameField : 'email',
+        passwordField : 'password',
         passReqToCallback : true,
         session: false
     },
@@ -87,7 +89,7 @@ module.exports = function(app, passport) {
             if (err)
                 return done(err);
             if (user)
-                return done(null, user);
+                return done(null, { user });
             else
                 return done(null, false);
         });
